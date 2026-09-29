@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Замовлення гри для колекції — Колекція відеоігор</title>
+</head>
+<body>
+
+    <header>
+        <h1>Колекція відеоігор</h1>
+        <nav aria-label="Головне меню">
+            <ul>
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="form.html">Замовлення</a></li>
+                <li><a href="index.html#about">Про проєкт</a></li>
+                <li><a href="index.html#favorites">Найцінніші екземпляри</a></li>
+                <li><a href="index.html#faq">Питання та відповіді</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Замовлення гри для поповнення колекції</h1>
+        <p>Заповніть форму, якщо хочете, щоб я додав конкретне видання гри до списку бажаного або оформив обмін із вашої колекції. Після відправлення я зв'яжуся з вами за вказаним телефоном або поштою для підтвердження деталей.</p>
+
+        <form action="/submit" method="post">
+            <!-- method="post": форма створює нове замовлення на придбання гри, тому повторне
+                 надсилання по F5 не має відбуватися випадково, і дані не повинні лишатися в URL -->
+
+            <fieldset>
+                <legend>Дані замовника</legend>
+
+                <p>
+                    <label for="fullname">Прізвище та ім'я:</label><br>
+                    <input type="text" id="fullname" name="fullname"
+                           placeholder="Микитич Олександр"
+                           minlength="2" maxlength="60"
+                           autocomplete="name" required>
+                </p>
+
+                <p>
+                    <label for="email">Електронна пошта:</label><br>
+                    <input type="email" id="email" name="email"
+                           placeholder="name@example.com"
+                           autocomplete="email" required>
+                </p>
+
+                <!-- pattern="\+380[0-9]{9}"
+                     \+380      — буквальні символи "+380"
+                     [0-9]{9}   — рівно дев'ять цифр після коду країни
+                     Разом: +380671234567 -->
+                <p>
+                    <label for="phone">Телефон:</label><br>
+                    <input type="tel" id="phone" name="phone"
+                           placeholder="+380671234567"
+                           pattern="\+380[0-9]{9}"
+                           title="Формат: +380 і рівно 9 цифр номера, без пробілів і дефісів"
+                           autocomplete="tel" required>
+                </p>
+
+                <p>
+                    <label for="visitDate">Бажана дата отримання:</label><br>
+                    <input type="date" id="visitDate" name="visitDate"
+                           min="2026-01-01" max="2026-12-31">
+                </p>
+            </fieldset>
+
+            <fieldset>
+                <legend>Параметри гри</legend>
+
+                <p>
+                    <label for="platform">Платформа:</label><br>
+                    <select id="platform" name="platform" required>
+                        <option value="">— оберіть —</option>
+                        <option value="ps4">PlayStation 4</option>
+                        <option value="ps5">PlayStation 5</option>
+                        <option value="xbox360">Xbox 360</option>
+                        <option value="switch">Nintendo Switch</option>
+                        <option value="pc">ПК</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="quantity">Кількість примірників:</label><br>
+                    <input type="number" id="quantity" name="quantity"
+                           min="1" max="5" step="1" value="1" required>
+                </p>
+
+                <!-- pattern="[A-Z]{2}-[0-9]{4}-[0-9]{4}"
+                     [A-Z]{2}    — рівно дві великі латинські літери (код серії)
+                     -           — буквальний дефіс
+                     [0-9]{4}    — рівно чотири цифри (умовний рік)
+                     -           — буквальний дефіс
+                     [0-9]{4}    — рівно чотири цифри (порядковий номер)
+                     Разом: GM-2026-0042 -->
+                <p>
+                    <label for="orderCode">Код бажаного видання (якщо відомий):</label><br>
+                    <input type="text" id="orderCode" name="orderCode"
+                           placeholder="GM-2026-0042"
+                           pattern="[A-Z]{2}-[0-9]{4}-[0-9]{4}"
+                           title="Формат: дві великі літери, дефіс, чотири цифри, дефіс, чотири цифри — наприклад GM-2026-0042">
+                </p>
+
+                <fieldset>
+                    <legend>Бажаний стан видання</legend>
+                    <p>
+                        <input type="radio" id="conditionNew" name="condition" value="new" checked>
+                        <label for="conditionNew">Нове, запечатане</label>
+                    </p>
+                    <p>
+                        <input type="radio" id="conditionGood" name="condition" value="good">
+                        <label for="conditionGood">Б/в, гарний стан</label>
+                    </p>
+                    <p>
+                        <input type="radio" id="conditionCollector" name="condition" value="collector">
+                        <label for="conditionCollector">Колекційне видання</label>
+                    </p>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Додаткові матеріали, які бажано мати в комплекті</legend>
+                    <p>
+                        <input type="checkbox" id="extraBox" name="extras" value="box">
+                        <label for="extraBox">Оригінальна коробка</label>
+                    </p>
+                    <p>
+                        <input type="checkbox" id="extraManual" name="extras" value="manual">
+                        <label for="extraManual">Буклет-інструкція</label>
+                    </p>
+                    <p>
+                        <input type="checkbox" id="extraArtbook" name="extras" value="artbook">
+                        <label for="extraArtbook">Артбук / саундтрек</label>
+                    </p>
+                </fieldset>
+            </fieldset>
+
+            <fieldset>
+                <legend>Додатково</legend>
+
+                <p>
+                    <label for="comments">Коментар до замовлення:</label><br>
+                    <textarea id="comments" name="comments" rows="4"
+                              minlength="0" maxlength="500"
+                              placeholder="Наприклад: цікавить лише PAL-версія"></textarea>
+                </p>
+
+                <p>
+                    <input type="checkbox" id="agreement" name="agreement" value="yes" required>
+                    <label for="agreement">Погоджуюсь з правилами обробки персональних даних</label>
+                </p>
+            </fieldset>
+
+            <p>
+                <button type="submit">Забронювати гру</button>
+                <button type="reset">Очистити форму</button>
+            </p>
+        </form>
+    </main>
+
+    <footer>
+        <p>Кібербезпека, 2 курс, Микитич Олександр, 2026</p>
+    </footer>
+
+</body>
+</html>
