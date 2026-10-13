@@ -2,19 +2,37 @@
    Колекція відеоігор — web-course-2
    Варіант: відеоігри (фізичні копії)
    Микитич Олександр, 2 курс, Кібербезпека
-   Дата: жовтень 2026
+   LR4 — жовтень 2026, LR5 — жовтень 2026
    ========================================================= */
 
 /* Шрифти Google Fonts з підтримкою кирилиці:
    Montserrat — заголовки, PT Serif — основний текст.
-   Разом використано 2 гарнітури і 3 накреслення (700 + 400 + 700). */
+   Разом використано 2 гарнітури і 3 накреслення (700 + 400 + 700).
+   @import за правилами CSS мусить стояти до будь-яких інших правил,
+   тому він вище за box-sizing. */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=PT+Serif:wght@400;700&subset=cyrillic&display=swap');
+
+/* ---------------------------------------------------------
+   0. Глобальна нормалізація коробок (LR5, п.2)
+   За замовчуванням (content-box) width — це ширина лише вмісту, а padding
+   і border додаються зверху: блок width: 50% + padding 1rem з кожного боку
+   займе більше половини рядка, і дві такі колонки не помістяться поруч.
+   У border-box width — це вже вся коробка разом із padding і border:
+   відступи «з'їдають» місце всередині, а зовнішній розмір лишається
+   рівно таким, як записано. ::before і ::after додано, бо псевдоелементи
+   не успадковують box-sizing від свого елемента.
+   --------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 /* ---------------------------------------------------------
    1. Палітра та нетипові custom properties
    --------------------------------------------------------- */
 :root {
-    /* кольори варіанта (6 обов'язкових ролей + 3 додаткові) */
+    /* кольори варіанта (6 обов'язкових ролей + додаткові) */
     --color-brand: hsl(220 60% 28%);
     --color-accent: hsl(38 92% 50%);
     --color-bg: #ffffff;
@@ -25,12 +43,28 @@
     --color-invalid: hsl(0 72% 45%);
     --color-valid: hsl(142 60% 32%);
 
-    /* нетипові (не кольорові) змінні */
+    /* похідні кольори: щоб поза :root не лишилося жодного «сирого» кольору */
+    --color-on-brand: #ffffff;              /* текст на синьому фоні */
+    --color-brand-light: hsl(220 45% 38%);  /* плитки меню на фоні шапки */
+    --color-invalid-bg: hsl(0 72% 96%);
+    --color-valid-bg: hsl(142 60% 96%);
+
+    /* нетипові (не кольорові) змінні з LR4 */
     --radius: 0.4rem;
     --space: 1rem;
     --shadow: 0 2px 8px rgb(0 0 0 / 12%);
     --font-heading: "Montserrat", "Segoe UI", sans-serif;
     --font-body: "PT Serif", Georgia, "Times New Roman", serif;
+
+    /* розміри (LR5): усі відступи нижче — лише через ці змінні */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --radius-lg: 12px;
+    --card-width: 260px;
+    --card-img-height: 170px;
+    --banner-width: 900px;
 }
 
 /* ---------------------------------------------------------
@@ -53,6 +87,12 @@ h1, h2, h3 {
 h1 { font-size: 2rem; }
 h2 { font-size: 1.5rem; }
 h3 { font-size: 1.15rem; }
+
+/* зображення не вилазять за межі батьківського блока */
+img {
+    max-width: 100%;
+    height: auto;
+}
 
 /* ширина текстових абзаців обмежена, щоб рядки не тягнулися на весь екран */
 main p {
@@ -77,23 +117,39 @@ nav a {
 }
 
 /* ---------------------------------------------------------
-   3. Наскрізна шапка й горизонтальне меню (п.5)
+   3. Наскрізна шапка й горизонтальне меню (LR4 п.5, LR5 п.8)
+   Селектор body > header, а не просто header: усередині карток на
+   головній теж є <header>, і вони не мають ставати синіми чи липкими.
    --------------------------------------------------------- */
-header {
-    background: var(--color-brand);
-    color: #ffffff;
-    padding: var(--space);
+/* position: sticky — шапка прокручується разом зі сторінкою, доки не
+   торкнеться верху вікна (top: 0), а далі «прилипає».
+   z-index працює лише для позиціонованих елементів, тому без position
+   він би просто ігнорувався; а без z-index картки з position: relative,
+   що йдуть у розмітці пізніше, малювалися б поверх шапки. */
+body > header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-brand);   /* непрозорий: текст не просвічує */
+    color: var(--color-on-brand);
 }
 
-header h1 {
-    color: #ffffff;
-    margin-top: 0;
+body > header h1 {
+    margin: 0 0 var(--space-sm);
+    font-size: 1.5rem;
+    color: var(--color-on-brand);
 }
 
 /* комбінатор "сусід": відступ одразу під шапкою перед основним вмістом */
 header + main {
     display: block;
     margin-top: var(--space);
+}
+
+/* бічні відступи, щоб вміст не прилипав до країв вікна */
+main {
+    padding: 0 var(--space-md);
 }
 
 nav ul {
@@ -104,14 +160,25 @@ nav ul {
 
 nav li {
     display: inline-block;
+    margin: 0 var(--space-xs) var(--space-xs) 0;
 }
 
+/* кожне посилання — окрема «плитка»: власний фон, відступи, скруглення */
 nav a {
     display: inline-block;
-    padding: 0.5em 1em;
-    color: #ffffff;
+    padding: var(--space-xs) var(--space-sm);
     text-decoration: none;
-    background: var(--color-brand);
+    background: var(--color-brand-light);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+}
+
+/* колір тексту — через :link і :visited: інакше загальні a:link / a:visited
+   з розділу 6 мають вищу специфічність (0,1,1) за nav a (0,0,2)
+   і фарбують пункти меню в синій на синьому фоні */
+nav a:link,
+nav a:visited {
+    color: var(--color-on-brand);
 }
 
 nav a:hover {
@@ -126,7 +193,7 @@ nav a.current {
     font-weight: 700;
 }
 
-footer {
+body > footer {
     background: var(--color-surface);
     color: var(--color-muted);
     padding: var(--space);
@@ -161,7 +228,7 @@ th, td {
 
 thead th {
     background: var(--color-brand);
-    color: #ffffff;
+    color: var(--color-on-brand);
 }
 
 /* числова колонка (ціна) — завжди останній td в рядку tbody */
@@ -169,7 +236,7 @@ tbody td:last-child {
     text-align: right;
 }
 
-/* Зебра рядків: формула an+b тут — 2n (every), тобто even.
+/* Зебра рядків: формула an+b тут — 2n, тобто even.
    2n перебирає 2, 4, 6... — усі парні рядки тіла таблиці,
    саме їм даємо фон var(--color-surface). Непарні (2n+1/odd)
    лишаються білими — так рядки легше розрізняти оком. */
@@ -210,7 +277,6 @@ input, select, textarea {
     border-radius: var(--radius);
     font-family: inherit;
     font-size: 1rem;
-    box-sizing: border-box;
 }
 
 /* :focus:invalid, а не просто :invalid — required-поля є невалідними
@@ -222,14 +288,14 @@ input:focus:invalid,
 select:focus:invalid,
 textarea:focus:invalid {
     border-color: var(--color-invalid);
-    background: hsl(0 72% 96%);
+    background: var(--color-invalid-bg);
 }
 
 input:focus:valid,
 select:focus:valid,
 textarea:focus:valid {
     border-color: var(--color-valid);
-    background: hsl(142 60% 96%);
+    background: var(--color-valid-bg);
 }
 
 /* обов'язкові поля позначені псевдоелементом (зірочка), а не текстом
@@ -303,7 +369,7 @@ blockquote::after {
 }
 
 /* атрибутний селектор — зовнішні посилання позначаємо значком через
-   ::after (ще один пседвоелемент, одночасно демонструє attribute-selector) */
+   ::after (ще один псевдоелемент, одночасно демонструє attribute-selector) */
 a[href^="http"]::after {
     content: " ↗";
 }
@@ -330,7 +396,7 @@ a:active { color: var(--color-invalid); }
    Претенденти на колір заголовка картки Persona 5 Royal:
    h3               → (0,0,1)
    .card h3         → (0,1,1)
-   #promo h3        → (1,1,1)  ← перемагає
+   #promo h3        → (1,0,1)  ← перемагає
 
    Порівнюємо трійки зліва направо, як номер версії:
    у #promo h3 одиниця в першій колонці (id), тому решта вже не має
@@ -347,3 +413,144 @@ a:active { color: var(--color-invalid); }
    шукати і правити в самому HTML на кожній сторінці окремо, а не в
    одному файлі styles.css. */
 /* <h3 style="color: red;">Persona 5 Royal</h3> */
+
+/* підпис-footer у картках головної сторінки */
+.card footer {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}
+
+/* =========================================================
+   LR5. БЛОКОВА МОДЕЛЬ І ПОЗИЦІОНУВАННЯ
+   ========================================================= */
+
+/* ===== Градієнтний банер (п.9) ===== */
+/* Градієнт тримається темного синього на більшій частині довжини, а
+   бурштин з'являється лише в кінці — так білий текст читається всюди.
+   text-shadow — страховка для світлого правого краю. */
+.banner {
+    width: min(100%, var(--banner-width));
+    margin: 0 auto var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    color: var(--color-on-brand);
+    background-image: linear-gradient(120deg, var(--color-brand) 0%, var(--color-brand-light) 60%, var(--color-accent) 100%);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 40%);
+}
+
+.banner h2 {
+    margin: 0 0 var(--space-sm);
+}
+
+.banner p {
+    margin: 0;
+}
+
+/* ===== Картки каталогу (п.4–7) ===== */
+
+/* Система відліку для бейджа. Експеримент: без position: relative бейдж
+   рахує top/right від найближчого позиціонованого предка, а такого немає,
+   тож координати беруться від початкового блока (вікна) — і бейджі обох
+   карток злітають у правий верхній кут сторінки, один на одного. */
+.card {
+    position: relative;
+}
+
+/* overflow: hidden обрізає все, що виходить за межі картки, — без нього
+   прямокутні кути зображення вилазили б поверх скруглених кутів border-radius. */
+.card {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+/* Розкладка лише для карток у сітці каталогу. padding: 0 скасовує
+   внутрішній відступ картки з LR4 — зображення має йти від краю до краю,
+   а відступ отримує тільки .card__body. Вертикальний відступ — лише знизу. */
+.cards .card {
+    display: inline-block;
+    vertical-align: top;
+    width: var(--card-width);
+    margin: 0 var(--space-md) var(--space-lg) 0;
+    padding: 0;
+    background: var(--color-bg);
+}
+
+/* object-fit: cover заповнює всю рамку 100% × 170px, зберігаючи пропорції
+   фото, і обрізає зайве по краях. display: block прибирає кілька пікселів
+   під картинкою: img за замовчуванням рядковий елемент і стоїть на базовій
+   лінії тексту, під якою браузер лишає місце для «хвостиків» літер (у, р). */
+.card__img {
+    display: block;
+    width: 100%;
+    height: var(--card-img-height);
+    object-fit: cover;
+    object-position: center;
+}
+
+.card__body {
+    padding: var(--space-md);
+}
+
+/* Три крапки: потрібні всі три властивості разом —
+   nowrap забороняє перенос, overflow обрізає зайве, ellipsis малює «…». */
+.card__title {
+    margin: 0 0 var(--space-sm);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Відступи в картці — тільки знизу: так вони ніколи не стикаються
+   й не схлопуються (див. демонстрацію в кінці файлу). */
+.card__meta,
+.card__id {
+    margin: 0 0 var(--space-sm);
+}
+
+.card__meta {
+    color: var(--color-muted);
+}
+
+.card__id {
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* останній абзац картки — без нижнього відступу, його вже дає padding */
+.card__body > :last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Бейдж (п.7) ===== */
+/* position: absolute виймає бейдж із потоку: він не займає місця,
+   не розтягує картку і не зсуває зображення чи текст. */
+.card__badge {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-accent);
+    color: var(--color-text);     /* темний текст на бурштині — контрастніше за білий */
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+}
+
+/* ===== Демонстрація: схлопування відступів (п.10) ===== */
+/* Схлопування вертикальних відступів (margin collapse).
+   Якщо розкоментувати цей блок, відстань між рядком платформи (.card__meta)
+   і кодом гри (.card__id) у картці буде НЕ 24 + 16 = 40px, а 24px:
+   два вертикальні відступи блокових сусідів, що стикаються, не додаються,
+   а зливаються в один — більший із двох.
+   Горизонтальні відступи так не поводяться, вони завжди додаються.
+   Між самими картками схлопування немає: вони inline-block, а відступи
+   рядкових блоків не схлопуються ніколи.
+   Саме тому в цій роботі всі вертикальні відступи задані тільки
+   в один бік — знизу.
+
+.card__meta { margin-bottom: 24px; }
+.card__meta + .card__id { margin-top: 16px; }
+*/
