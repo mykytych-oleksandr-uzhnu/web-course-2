@@ -44,8 +44,10 @@
     --color-valid: hsl(142 60% 32%);
 
     /* похідні кольори: щоб поза :root не лишилося жодного «сирого» кольору */
-    --color-on-brand: #ffffff;              /* текст на синьому фоні */
-    --color-brand-light: hsl(220 45% 38%);  /* плитки меню на фоні шапки */
+    --color-on-brand: #ffffff;
+    /* текст на синьому фоні */
+    --color-brand-light: hsl(220 45% 38%);
+    /* плитки меню на фоні шапки */
     --color-invalid-bg: hsl(0 72% 96%);
     --color-valid-bg: hsl(142 60% 96%);
 
@@ -65,7 +67,7 @@
     --card-width: 260px;
     --card-img-height: 170px;
     --banner-width: 900px;
-    
+
     /* макет (LR6) */
     --gap: 1.25rem;
     --min-col: 240px;
@@ -80,18 +82,31 @@ body {
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
-    font-size: 100%;        /* 16px */
-    line-height: 1.6;       /* 1.5–1.7 для основного тексту */
+    font-size: 100%;
+    /* 16px */
+    line-height: 1.6;
+    /* 1.5–1.7 для основного тексту */
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: var(--font-heading);
-    line-height: 1.2;       /* 1.1–1.3 для заголовків */
+    line-height: 1.2;
+    /* 1.1–1.3 для заголовків */
 }
 
-h1 { font-size: 2rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.15rem; }
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.15rem;
+}
 
 /* зображення не вилазять за межі батьківського блока */
 img {
@@ -131,23 +146,28 @@ nav a {
    z-index працює лише для позиціонованих елементів, тому без position
    він би просто ігнорувався; а без z-index картки з position: relative,
    що йдуть у розмітці пізніше, малювалися б поверх шапки. */
-body > header {
+body>header {
     position: sticky;
     top: 0;
     z-index: 10;
     padding: var(--space-sm) var(--space-md);
-    background: var(--color-brand);   /* непрозорий: текст не просвічує */
+    background: var(--color-brand);
+    /* непрозорий: текст не просвічує */
     color: var(--color-on-brand);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap);
 }
 
-body > header h1 {
-    margin: 0 0 var(--space-sm);
+body>header h1 {
+    margin: 0;
     font-size: 1.5rem;
     color: var(--color-on-brand);
 }
 
 /* комбінатор "сусід": відступ одразу під шапкою перед основним вмістом */
-header + main {
+header+main {
     display: block;
     margin-top: var(--space);
 }
@@ -157,20 +177,20 @@ main {
     padding: 0 var(--space-md);
 }
 
-nav ul {
+
+body>header ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
     list-style: none;
-    padding-left: 0;
+    padding: 0;
     margin: 0;
 }
 
-nav li {
-    display: inline-block;
-    margin: 0 var(--space-xs) var(--space-xs) 0;
-}
 
 /* кожне посилання — окрема «плитка»: власний фон, відступи, скруглення */
 nav a {
-    display: inline-block;
+    display: block;
     padding: var(--space-xs) var(--space-sm);
     text-decoration: none;
     background: var(--color-brand-light);
@@ -198,7 +218,7 @@ nav a.current {
     font-weight: 700;
 }
 
-body > footer {
+body>footer {
     background: var(--color-surface);
     color: var(--color-muted);
     padding: var(--space);
@@ -207,7 +227,7 @@ body > footer {
 
 /* комбінатор "прямий нащадок": стилізуємо лише секції, що лежать
    безпосередньо в <main>, а не вкладені в них довільні блоки */
-main > section {
+main>section {
     padding: var(--space) 0;
 }
 
@@ -215,7 +235,8 @@ main > section {
    4. Таблиця каталогу з LR2 (п.6) — лише селекторами по структурі
    --------------------------------------------------------- */
 table {
-    border-collapse: collapse; /* інакше лінії подвояться */
+    border-collapse: collapse;
+    /* інакше лінії подвояться */
     width: 100%;
 }
 
@@ -225,7 +246,8 @@ caption {
     margin-bottom: 0.5em;
 }
 
-th, td {
+th,
+td {
     border: 1px solid var(--color-border);
     padding: 0.5em 0.75em;
     text-align: left;
@@ -274,7 +296,9 @@ label {
     margin-bottom: 0.25em;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     width: 100%;
     max-width: 24rem;
     padding: 0.5em;
@@ -334,7 +358,7 @@ button[type="reset"] {
 
 /* псевдоклас :checked — позначений варіант (радіо/чекбокс) підсвічує
    свій підпис, щоб було видно вибір навіть без фокуса на самому полі */
-input:checked + label {
+input:checked+label {
     color: var(--color-brand);
     font-weight: 700;
 }
@@ -351,7 +375,7 @@ details:not([open]) summary {
 
 /* псевдоклас :first-child — прибираємо зайвий відступ зверху в першого
    елемента всередині <main>, яким би він не був */
-main > *:first-child {
+main>*:first-child {
     margin-top: 0;
 }
 
@@ -387,11 +411,26 @@ a[href$=".pdf"]::after {
    Порядок критичний, бо :hover і :active йдуть пізніше за :link/:visited
    і мають перекривати їх у каскаді — якщо :visited поставити після :hover,
    відвіданий стан знову "забере" колір у наведення й клік. */
-a:link { color: var(--color-brand); }
-a:visited { color: var(--color-muted); }
-a:hover { color: var(--color-accent); }
-a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-a:active { color: var(--color-invalid); }
+a:link {
+    color: var(--color-brand);
+}
+
+a:visited {
+    color: var(--color-muted);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+a:active {
+    color: var(--color-invalid);
+}
 
 /* ---------------------------------------------------------
    7. Демонстрація специфічності (п.9)
@@ -409,7 +448,9 @@ a:active { color: var(--color-invalid); }
    один id — саме тому id для стилів зазвичай не використовують. */
 /* h3       { color: var(--color-text); } */
 /* .card h3 { color: var(--color-muted); } */
-#promo h3 { color: var(--color-brand); }
+#promo h3 {
+    color: var(--color-brand);
+}
 
 /* Якби тут був inline-стиль style="color: red" прямо в розмітці,
    він переміг би всі три правила вище, бо inline-стилі мають
@@ -468,17 +509,19 @@ a:active { color: var(--color-invalid); }
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
 }
+
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
     gap: var(--gap);
 }
+
 /* Розкладка лише для карток у сітці каталогу. padding: 0 скасовує
    внутрішній відступ картки з LR4 — зображення має йти від краю до краю,
    а відступ отримує тільки .card__body. Вертикальний відступ — лише знизу. */
 .cards .card {
-     display: flex;
-    flex-direction: column;   
+    display: flex;
+    flex-direction: column;
     padding: 0;
     background: var(--color-bg);
 }
@@ -526,7 +569,7 @@ a:active { color: var(--color-invalid); }
 }
 
 /* останній абзац картки — без нижнього відступу, його вже дає padding */
-.card__body > :last-child {
+.card__body> :last-child {
     margin-bottom: 0;
 }
 
@@ -539,7 +582,8 @@ a:active { color: var(--color-invalid); }
     right: var(--space-sm);
     padding: var(--space-xs) var(--space-sm);
     background: var(--color-accent);
-    color: var(--color-text);     /* темний текст на бурштині — контрастніше за білий */
+    color: var(--color-text);
+    /* темний текст на бурштині — контрастніше за білий */
     font-family: var(--font-heading);
     font-size: 0.8rem;
     border-radius: 999px;
@@ -560,7 +604,8 @@ a:active { color: var(--color-invalid); }
 
 .card__meta { margin-bottom: 24px; }
 .card__meta + .card__id { margin-top: 16px; }
-*//* margin-top: auto забирає весь вільний простір над блоком у flex-колонці,
+*/
+/* margin-top: auto забирає весь вільний простір над блоком у flex-колонці,
    так само як margin: 0 auto ділить простір по горизонталі, тому кнопки стають унизу */
 .card__actions {
     margin-top: auto;
@@ -581,3 +626,48 @@ a:active { color: var(--color-invalid); }
 .card .card__action:hover {
     background: var(--color-accent);
 }
+
+/* ---------- LR6: макет сторінки ---------- */
+.layout {
+    display: grid;
+    grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+                    "nav main side"
+        "foot foot foot";
+    gap: var(--gap);
+    padding: var(--gap);
+}
+
+.layout__nav    { grid-area: nav; }
+.layout__main   { grid-area: main; min-width: 0; }
+.layout__aside  { grid-area: side; }
+.layout__footer { grid-area: foot; }
+
+.layout__nav,
+.layout__aside,
+.layout__footer {
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border-radius: var(--radius);
+}
+
+.layout__nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+/* ---------- LR6: притиснутий футер ---------- */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* flex: 1 змушує елемент забрати весь вільний простір у flex-батька (body);
+   height: 100% тут не спрацює, бо в body немає явної висоти і не врахується шапка */
+.layout { flex: 1; }
+main    { flex: 1; }
