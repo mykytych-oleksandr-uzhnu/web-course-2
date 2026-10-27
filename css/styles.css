@@ -671,3 +671,37 @@ body {
    height: 100% тут не спрацює, бо в body немає явної висоти і не врахується шапка */
 .layout { flex: 1; }
 main    { flex: 1; }
+/* головна: дві колонки без aside */
+.layout--home {
+    grid-template-columns: var(--sidebar) 1fr;
+    grid-template-areas:
+        "nav  main"
+        "foot foot";
+}
+
+/* ---------- LR6: модальне вікно ---------- */
+/* z-index не потрібен: showModal() виносить вікно у верхній шар (top layer),
+   який завжди над усією сторінкою, на відміну від липкої шапки у звичайному потоці */
+dialog {
+    width: min(90%, 420px);
+    padding: var(--space-lg);
+    border: none;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
+}
+
+dialog::backdrop {
+    background: rgb(0 0 0 / 55%);
+}
+
+button.card__action {
+    border: none;
+    font: inherit;
+    cursor: pointer;
+}
+/* поки модальне вікно відкрите, сторінка позаду не прокручується */
+body:has(dialog[open]) {
+    overflow: hidden;
+}

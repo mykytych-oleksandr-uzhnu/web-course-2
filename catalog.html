@@ -49,6 +49,7 @@
                             <p class="card__id">Код: GM-2020-0001</p>
                         </div>
                         <div class="card__actions">
+                            <button class="card__action" id="openDetails" type="button">Швидкий перегляд</button>
                             <a class="card__action" href="#">Детальніше</a>
                         </div>
                     </article>
@@ -164,6 +165,13 @@
                     </article>
                 </div>
             </section>
+            <dialog id="details">
+                <h2>Persona 5 Royal</h2>
+                <p>Ідентифікатор: GM-2020-0001</p>
+                <p>Платформа: PlayStation 4. Жанр: JRPG. Рік виходу: 2020. Розробник: Atlus. Стан: як новий, диск без
+                    подряпин, оригінальна обкладинка.</p>
+                <button id="closeDetails" type="button">Закрити</button>
+            </dialog>
             <section>
                 <h2>Розділи каталогу</h2>
                 <ul>
@@ -320,6 +328,12 @@
         </footer>
     </div>
 
+
+<script>
+    const dlg = document.getElementById("details");
+    document.getElementById("openDetails").addEventListener("click", () => dlg.showModal());
+    document.getElementById("closeDetails").addEventListener("click", () => dlg.close());
+</script>
 </body>
 
 </html>
