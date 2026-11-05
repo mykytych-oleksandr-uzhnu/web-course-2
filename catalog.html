@@ -12,15 +12,18 @@
 
     <header>
         <h1>Колекція відеоігор</h1>
-        <nav aria-label="Головне меню">
-            <ul>
-                <li><a href="index.html">Головна</a></li>
-                <li><a href="catalog.html" class="current">Каталог</a></li>
-                <li><a href="form.html">Замовлення</a></li>
-                <li><a href="index.html#about">Про проєкт</a></li>
-                <li><a href="index.html#favorites">Найцінніші екземпляри</a></li>
-                <li><a href="index.html#faq">Питання та відповіді</a></li>
-            </ul>
+        <nav class="nav" aria-label="Головне меню">
+            <details open>
+                <summary class="nav__toggle">☰ Меню</summary>
+                <ul class="nav__list">
+                    <li><a href="index.html">Головна</a></li>
+                    <li><a href="catalog.html" class="current">Каталог</a></li>
+                    <li><a href="form.html">Замовлення</a></li>
+                    <li><a href="index.html#about">Про проєкт</a></li>
+                    <li><a href="index.html#favorites">Найцінніші екземпляри</a></li>
+                    <li><a href="index.html#faq">Питання та відповіді</a></li>
+                </ul>
+            </details>
         </nav>
     </header>
 
@@ -255,58 +258,58 @@
 
             <section>
                 <h2>Таблиця колекції</h2>
-                  <div class="table-wrap">
-                <table>
-                    <caption>Основні ігри колекції та їхні характеристики</caption>
-                    <thead>
-                        <tr>
-                            <th rowspan="2" scope="col">Назва гри</th>
-                            <th colspan="3" scope="colgroup">Характеристики</th>
-                            <th rowspan="2" scope="col">Стан</th>
-                            <th rowspan="2" scope="col">Ціна ($)</th>
-                        </tr>
-                        <tr>
-                            <th scope="col">Платформа</th>
-                            <th scope="col">Рік випуску</th>
-                            <th scope="col">Жанр</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Persona 5 Royal</th>
-                            <td rowspan="2">PlayStation 4</td>
-                            <td>2020</td>
-                            <td>JRPG</td>
-                            <td>Як новий</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Dishonored</th>
-                            <td>2012</td>
-                            <td>Immersive sim</td>
-                            <td>Як новий</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Deus Ex: Human Revolution</th>
-                            <td>Xbox 360</td>
-                            <td>2011</td>
-                            <td>Immersive sim</td>
-                            <td>Дуже добрий</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">The Legend of Zelda: Ocarina of Time</th>
-                            <td>Nintendo 64</td>
-                            <td>1998</td>
-                            <td>Action-adventure</td>
-                            <td>Повний комплект</td>
-                            <td>60</td>
-                        </tr>
-                    </tbody>
-                
+                <div class="table-wrap">
+                    <table>
+                        <caption>Основні ігри колекції та їхні характеристики</caption>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" scope="col">Назва гри</th>
+                                <th colspan="3" scope="colgroup">Характеристики</th>
+                                <th rowspan="2" scope="col">Стан</th>
+                                <th rowspan="2" scope="col">Ціна ($)</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">Платформа</th>
+                                <th scope="col">Рік випуску</th>
+                                <th scope="col">Жанр</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Persona 5 Royal</th>
+                                <td rowspan="2">PlayStation 4</td>
+                                <td>2020</td>
+                                <td>JRPG</td>
+                                <td>Як новий</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Dishonored</th>
+                                <td>2012</td>
+                                <td>Immersive sim</td>
+                                <td>Як новий</td>
+                                <td>12</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deus Ex: Human Revolution</th>
+                                <td>Xbox 360</td>
+                                <td>2011</td>
+                                <td>Immersive sim</td>
+                                <td>Дуже добрий</td>
+                                <td>15</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">The Legend of Zelda: Ocarina of Time</th>
+                                <td>Nintendo 64</td>
+                                <td>1998</td>
+                                <td>Action-adventure</td>
+                                <td>Повний комплект</td>
+                                <td>60</td>
+                            </tr>
+                        </tbody>
+
                     </table>
-</div>
+                </div>
 
                 <figure>
                     <img src="images/ps1-collection-boxes.jpg"
@@ -332,11 +335,11 @@
     </div>
 
 
-<script>
-    const dlg = document.getElementById("details");
-    document.getElementById("openDetails").addEventListener("click", () => dlg.showModal());
-    document.getElementById("closeDetails").addEventListener("click", () => dlg.close());
-</script>
+    <script>
+        const dlg = document.getElementById("details");
+        document.getElementById("openDetails").addEventListener("click", () => dlg.showModal());
+        document.getElementById("closeDetails").addEventListener("click", () => dlg.close());
+    </script>
 </body>
 
 </html>
