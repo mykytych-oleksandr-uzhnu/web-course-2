@@ -827,6 +827,33 @@ dialog::backdrop {
     background: rgb(0 0 0 / 55%);
 }
 
+/* ===== Анімація появи модалки (@keyframes) ===== */
+@keyframes fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes pop {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Тут ваш коментар своїми словами: що робить both в animation-fill-mode
+   і що було б видно без нього */
+dialog[open] {
+    animation: pop 280ms ease-out both;
+}
+
+dialog[open]::backdrop {
+    animation: fade 200ms ease-out both;
+}
+
 button.card__action {
     border: none;
     font: inherit;
