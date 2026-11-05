@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог — Колекція відеоігор</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
     <header>
@@ -12,7 +15,7 @@
         <nav aria-label="Головне меню">
             <ul>
                 <li><a href="index.html">Головна</a></li>
-                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="catalog.html" class="current">Каталог</a></li>
                 <li><a href="form.html">Замовлення</a></li>
                 <li><a href="index.html#about">Про проєкт</a></li>
                 <li><a href="index.html#favorites">Найцінніші екземпляри</a></li>
@@ -21,147 +24,316 @@
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h2>Розділи каталогу</h2>
+    <div class="layout">
+        <nav class="layout__nav" aria-label="Рубрики каталогу">
+            <h2>Рубрики</h2>
             <ul>
-                <li>Консольні ігри
-                    <ul>
-                        <li>PlayStation
-                            <ul>
-                                <li>PS1</li>
-                                <li>PS2</li>
-                                <li>PS4</li>
-                                <li>PS5</li>
-                            </ul>
-                        </li>
-                        <li>Xbox
-                            <ul>
-                                <li>Xbox 360</li>
-                                <li>Xbox One</li>
-                            </ul>
-                        </li>
-                        <li>Nintendo
-                            <ul>
-                                <li>NES</li>
-                                <li>SNES</li>
-                                <li>Switch</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>ПК-ігри
-                    <ul>
-                        <li>Стратегії</li>
-                        <li>RPG</li>
-                        <li>Симулятори</li>
-                    </ul>
-                </li>
-                <li>Портативні консолі
-                    <ul>
-                        <li>Game Boy</li>
-                        <li>PS Vita</li>
-                    </ul>
-                </li>
+                <li><a href="#">PlayStation</a></li>
+                <li><a href="#">Xbox</a></li>
+                <li><a href="#">Nintendo</a></li>
+                <li><a href="#">PC</a></li>
+                <li><a href="#">Рідкісні видання</a></li>
             </ul>
-        </section>
+        </nav>
+        <main class="layout__main">
+            <section class="catalog">
+                <h2>Каталог</h2>
+                <div class="cards">
+                    <article class="card">
+                        <span class="card__badge">Нове</span>
+                        <img class="card__img" src="https://picsum.photos/seed/persona5/400/600"
+                            alt="Обкладинка Persona 5 Royal для PlayStation 4" width="400" height="600">
+                        <div class="card__body">
+                            <h3 class="card__title">Persona 5 Royal</h3>
+                            <p class="card__meta">PlayStation 4 · JRPG · як новий</p>
+                            <p class="card__id">Код: GM-2020-0001</p>
+                        </div>
+                        <div class="card__actions">
+                            <button class="card__action" id="openDetails" type="button">Швидкий перегляд</button>
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-        <section>
-            <h2>Як поповнити колекцію</h2>
-            <ol>
-                <li>Знайти потрібне видання гри на маркетплейсах або в спеціалізованих магазинах.</li>
-                <li>Перевірити стан диска чи картриджа та комплектність (коробка, буклет).</li>
-                <li>Порівняти ціни в кількох джерелах.</li>
-                <li>Домовитися про зустріч або оформити доставку.</li>
-                <li>Оглянути гру особисто перед оплатою, якщо є така можливість.</li>
-            </ol>
-            <p>Після придбання гру потрібно правильно оформити в колекції:</p>
-            <ol start="6">
-                <li>Занести гру в каталог і сфотографувати її стан.</li>
-                <li>Розмістити на полиці за системою: платформа → жанр → рік випуску.</li>
-            </ol>
-        </section>
+                    <article class="card">
+                        <img class="card__img" src="https://picsum.photos/seed/dishonored/600/400"
+                            alt="Обкладинка Dishonored для PlayStation 4" width="600" height="400">
+                        <div class="card__body">
+                            <h3 class="card__title">Dishonored</h3>
+                            <p class="card__meta">PlayStation 4 · Immersive sim · як новий</p>
+                            <p class="card__id">Код: GM-2012-0002</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-        <section>
-            <h2>Глосарій колекціонера</h2>
-            <dl>
-                <dt>Комплектність (CIB)</dt>
-                <dd>Complete In Box — гра з усіма оригінальними компонентами: диском, коробкою та буклетом.</dd>
+                    <article class="card">
+                        <img class="card__img" src="images/deus-ex-human-revolution.jpg"
+                            alt="Обкладинка колекційного видання Deus Ex: Human Revolution" width="400" height="300">
+                        <div class="card__body">
+                            <h3 class="card__title">Deus Ex: Human Revolution — Director's Cut, колекційне видання з
+                                артбуком</h3>
+                            <p class="card__meta">Xbox 360 · Immersive sim · дуже добрий</p>
+                            <p class="card__id">Код: GM-2011-0003</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-                <dt>Лутбокс</dt>
-                <dd>Колекційне видання гри з додатковими фізичними предметами: фігурками, артбуками, саундтреками.</dd>
+                    <article class="card">
+                        <span class="card__badge">Рідкість</span>
+                        <img class="card__img" src="https://picsum.photos/seed/zelda64/800/450"
+                            alt="Картридж The Legend of Zelda: Ocarina of Time у коробці з буклетом" width="800"
+                            height="450">
+                        <div class="card__body">
+                            <h3 class="card__title">The Legend of Zelda: Ocarina of Time — повний комплект із картою
+                                Хайрула
+                            </h3>
+                            <p class="card__meta">Nintendo 64 · Action-adventure · повний комплект</p>
+                            <p class="card__id">Код: GM-1998-0004</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <img class="card__img" src="https://picsum.photos/seed/hollowknight/600/400"
+                            alt="Обкладинка Hollow Knight для Nintendo Switch" width="600" height="400">
+                        <div class="card__body">
+                            <h3 class="card__title">Hollow Knight</h3>
+                            <p class="card__meta">Nintendo Switch · Metroidvania · як новий</p>
+                            <p class="card__id">Код: GM-2017-0005</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-                <dt>Регіональне блокування</dt>
-                <dd>Обмеження, яке не дозволяє запустити диск одного регіону на консолі іншого регіону.</dd>
+                    <article class="card">
+                        <img class="card__img" src="https://picsum.photos/seed/halflife2/600/400"
+                            alt="Обкладинка Half-Life 2 для PC" width="600" height="400">
+                        <div class="card__body">
+                            <h3 class="card__title">Half-Life 2</h3>
+                            <p class="card__meta">PC · Шутер · коробкове видання</p>
+                            <p class="card__id">Код: GM-2004-0006</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-                <dt>Іммерсивний симулятор</dt>
-                <dt>Immersive sim</dt>
-                <dd>Жанр ігор, що дає гравцю свободу вирішення завдань кількома способами замість єдиного правильного шляху.</dd>
-            </dl>
-        </section>
+                    <article class="card">
+                        <span class="card__badge">Рідкість</span>
+                        <img class="card__img" src="https://picsum.photos/seed/ff7/600/400"
+                            alt="Обкладинка Final Fantasy VII для PlayStation" width="600" height="400">
+                        <div class="card__body">
+                            <h3 class="card__title">Final Fantasy VII</h3>
+                            <p class="card__meta">PlayStation · JRPG · три диски, повний комплект</p>
+                            <p class="card__id">Код: GM-1997-0007</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-        <section>
-            <h2>Таблиця колекції</h2>
-            <table>
-                <caption>Основні ігри колекції та їхні характеристики</caption>
-                <thead>
-                    <tr>
-                        <th rowspan="2" scope="col">Назва гри</th>
-                        <th colspan="3" scope="colgroup">Характеристики</th>
-                        <th rowspan="2" scope="col">Стан</th>
-                        <th rowspan="2" scope="col">Ціна ($)</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">Платформа</th>
-                        <th scope="col">Рік випуску</th>
-                        <th scope="col">Жанр</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Persona 5 Royal</th>
-                        <td rowspan="2">PlayStation 4</td>
-                        <td>2020</td>
-                        <td>JRPG</td>
-                        <td>Як новий</td>
-                        <td>45</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Dishonored</th>
-                        <td>2012</td>
-                        <td>Immersive sim</td>
-                        <td>Як новий</td>
-                        <td>12</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Deus Ex: Human Revolution</th>
-                        <td>Xbox 360</td>
-                        <td>2011</td>
-                        <td>Immersive sim</td>
-                        <td>Дуже добрий</td>
-                        <td>15</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">The Legend of Zelda: Ocarina of Time</th>
-                        <td>Nintendo 64</td>
-                        <td>1998</td>
-                        <td>Action-adventure</td>
-                        <td>Повний комплект</td>
-                        <td>60</td>
-                    </tr>
-                </tbody>
-            </table>
+                    <article class="card">
+                        <img class="card__img" src="https://picsum.photos/seed/halo3/600/400"
+                            alt="Обкладинка Halo 3 для Xbox 360" width="600" height="400">
+                        <div class="card__body">
+                            <h3 class="card__title">Halo 3</h3>
+                            <p class="card__meta">Xbox 360 · Шутер · дуже добрий</p>
+                            <p class="card__id">Код: GM-2007-0008</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
 
-            <figure>
-                <img src="images/ps1-collection-boxes.jpg" alt="Ряд коробок класичних PS1-ігор на полиці, впорядкованих за роком випуску" width="500" height="350" loading="lazy">
-                <figcaption>Частина колекції PS1-ігор, упорядкована за роком випуску</figcaption>
-            </figure>
-        </section>
-    </main>
+                    <article class="card">
+                        <span class="card__badge">Нове</span>
+                        <img class="card__img" src="https://picsum.photos/seed/mario64/600/400"
+                            alt="Обкладинка Super Mario 64 для Nintendo 64" width="600" height="400">
+                        <div class="card__body">
+                            <h3 class="card__title">Super Mario 64</h3>
+                            <p class="card__meta">Nintendo 64 · Платформер · лише картридж</p>
+                            <p class="card__id">Код: GM-1996-0009</p>
+                        </div>
+                        <div class="card__actions">
+                            <a class="card__action" href="#">Детальніше</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            <dialog id="details">
+                <h2>Persona 5 Royal</h2>
+                <p>Ідентифікатор: GM-2020-0001</p>
+                <p>Платформа: PlayStation 4. Жанр: JRPG. Рік виходу: 2020. Розробник: Atlus. Стан: як новий, диск без
+                    подряпин, оригінальна обкладинка.</p>
+                <button id="closeDetails" type="button">Закрити</button>
+            </dialog>
+            <section>
+                <h2>Розділи каталогу</h2>
+                <ul>
+                    <li>Консольні ігри
+                        <ul>
+                            <li>PlayStation
+                                <ul>
+                                    <li>PS1</li>
+                                    <li>PS2</li>
+                                    <li>PS4</li>
+                                    <li>PS5</li>
+                                </ul>
+                            </li>
+                            <li>Xbox
+                                <ul>
+                                    <li>Xbox 360</li>
+                                    <li>Xbox One</li>
+                                </ul>
+                            </li>
+                            <li>Nintendo
+                                <ul>
+                                    <li>NES</li>
+                                    <li>SNES</li>
+                                    <li>Switch</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>ПК-ігри
+                        <ul>
+                            <li>Стратегії</li>
+                            <li>RPG</li>
+                            <li>Симулятори</li>
+                        </ul>
+                    </li>
+                    <li>Портативні консолі
+                        <ul>
+                            <li>Game Boy</li>
+                            <li>PS Vita</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
 
-    <footer>
-        <p>Кібербезпека, 2 курс, Микитич Олександр, 2026</p>
-    </footer>
+            <section>
+                <h2>Як поповнити колекцію</h2>
+                <ol>
+                    <li>Знайти потрібне видання гри на маркетплейсах або в спеціалізованих магазинах.</li>
+                    <li>Перевірити стан диска чи картриджа та комплектність (коробка, буклет).</li>
+                    <li>Порівняти ціни в кількох джерелах.</li>
+                    <li>Домовитися про зустріч або оформити доставку.</li>
+                    <li>Оглянути гру особисто перед оплатою, якщо є така можливість.</li>
+                </ol>
+                <p>Після придбання гру потрібно правильно оформити в колекції:</p>
+                <ol start="6">
+                    <li>Занести гру в каталог і сфотографувати її стан.</li>
+                    <li>Розмістити на полиці за системою: платформа → жанр → рік випуску.</li>
+                </ol>
+            </section>
 
+            <section>
+                <h2>Глосарій колекціонера</h2>
+                <dl>
+                    <dt>Комплектність (CIB)</dt>
+                    <dd>Complete In Box — гра з усіма оригінальними компонентами: диском, коробкою та буклетом.</dd>
+
+                    <dt>Лутбокс</dt>
+                    <dd>Колекційне видання гри з додатковими фізичними предметами: фігурками, артбуками, саундтреками.
+                    </dd>
+
+                    <dt>Регіональне блокування</dt>
+                    <dd>Обмеження, яке не дозволяє запустити диск одного регіону на консолі іншого регіону.</dd>
+
+                    <dt>Іммерсивний симулятор</dt>
+                    <dt>Immersive sim</dt>
+                    <dd>Жанр ігор, що дає гравцю свободу вирішення завдань кількома способами замість єдиного
+                        правильного
+                        шляху.</dd>
+                </dl>
+            </section>
+
+            <section>
+                <h2>Таблиця колекції</h2>
+                <table>
+                    <caption>Основні ігри колекції та їхні характеристики</caption>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" scope="col">Назва гри</th>
+                            <th colspan="3" scope="colgroup">Характеристики</th>
+                            <th rowspan="2" scope="col">Стан</th>
+                            <th rowspan="2" scope="col">Ціна ($)</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Платформа</th>
+                            <th scope="col">Рік випуску</th>
+                            <th scope="col">Жанр</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Persona 5 Royal</th>
+                            <td rowspan="2">PlayStation 4</td>
+                            <td>2020</td>
+                            <td>JRPG</td>
+                            <td>Як новий</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Dishonored</th>
+                            <td>2012</td>
+                            <td>Immersive sim</td>
+                            <td>Як новий</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Deus Ex: Human Revolution</th>
+                            <td>Xbox 360</td>
+                            <td>2011</td>
+                            <td>Immersive sim</td>
+                            <td>Дуже добрий</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">The Legend of Zelda: Ocarina of Time</th>
+                            <td>Nintendo 64</td>
+                            <td>1998</td>
+                            <td>Action-adventure</td>
+                            <td>Повний комплект</td>
+                            <td>60</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <figure>
+                    <img src="images/ps1-collection-boxes.jpg"
+                        alt="Ряд коробок класичних PS1-ігор на полиці, впорядкованих за роком випуску" width="500"
+                        height="350" loading="lazy">
+                    <figcaption>Частина колекції PS1-ігор, упорядкована за роком випуску</figcaption>
+                </figure>
+            </section>
+        </main>
+        <aside class="layout__aside">
+            <h2>Популярне</h2>
+            <ul>
+                <li>Persona 5 Royal</li>
+                <li>Final Fantasy VII</li>
+                <li>Hollow Knight</li>
+                <li>Halo 3</li>
+            </ul>
+        </aside>
+
+        <footer class="layout__footer">
+            <p>Кібербезпека, 2 курс, Микитич Олександр, 2026</p>
+        </footer>
+    </div>
+
+
+<script>
+    const dlg = document.getElementById("details");
+    document.getElementById("openDetails").addEventListener("click", () => dlg.showModal());
+    document.getElementById("closeDetails").addEventListener("click", () => dlg.close());
+</script>
 </body>
+
 </html>

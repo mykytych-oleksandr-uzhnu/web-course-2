@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Колекція відеоігор</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
     <header>
         <h1>Колекція відеоігор</h1>
-        <img src="images/game-shelf.jpg" alt="Полиця з фізичними копіями відеоігор — дисками та картриджами різних поколінь консолей" width="800" height="500">
         <nav aria-label="Головне меню">
             <ul>
-                <li><a href="index.html">Головна</a></li>
+                <li><a href="index.html" class="current">Головна</a></li>
                 <li><a href="catalog.html">Каталог</a></li>
                 <li><a href="form.html">Замовлення</a></li>
                 <li><a href="#about">Про проєкт</a></li>
@@ -22,9 +22,25 @@
         </nav>
     </header>
 
-    <main>
+    <div class="layout layout--home">
+    <nav class="layout__nav" aria-label="Розділи головної">
+        <h2>Розділи</h2>
+        <ul>
+            <li><a href="#about">Про проєкт</a></li>
+            <li><a href="#favorites">Найцінніші екземпляри</a></li>
+            <li><a href="#faq">Питання та відповіді</a></li>
+            <li><a href="catalog.html">Увесь каталог</a></li>
+        </ul>
+    </nav>
+    <main class="layout__main">
+        <section class="banner">
+            <h2>Від PS1 до PS5: фізичні копії, які не зникнуть</h2>
+            <p>Каталог особистої колекції з описом стану кожного диска й картриджа. Шукаєте рідкісне видання чи хочете обмінятися — оформіть замовлення.</p>
+        </section>
+
         <section id="about">
             <h2>Про проєкт</h2>
+            <img src="images/game-shelf.jpg" alt="Полиця з фізичними копіями відеоігор — дисками та картриджами різних поколінь консолей" width="800" height="500">
             <p>Цей сайт — каталог моєї особистої колекції відеоігор: від класики 90-х до сучасних хітів. Тут я зберігаю інформацію про кожну гру, яку проходив або яка чекає своєї черги на полиці. Метою проєкту є систематизація колекції.</p>
             <p>Особливу увагу приділяю <strong>фізичним копіям</strong> — дискам і картриджам, адже цифрові версії з часом можуть зникнути з магазинів. Колекціонування ігор — це спосіб зберегти історію індустрії.</p>
         </section>
@@ -34,7 +50,7 @@
             <p>Серед усіх ігор особливе місце займають JRPG та іммерсивні симулятори — жанри, у яких важлива не графіка, а <em>глибина сюжету</em> та свобода вибору гравця.</p>
             <blockquote>Ігри — це не витрата часу, а інвестиція в досвід, який неможливо отримати іншим способом.</blockquote>
 
-            <article>
+            <article class="card" id="promo">
                 <header>
                     <h3>Persona 5 Royal</h3>
                 </header>
@@ -45,7 +61,7 @@
                 </footer>
             </article>
 
-            <article>
+            <article class="card">
                 <header>
                     <h3>Deus Ex: Human Revolution</h3>
                 </header>
@@ -86,9 +102,10 @@
         </section>
     </main>
 
-    <footer>
+    <footer class="layout__footer">
         <p>Кібербезпека, 2 курс, Микитич Олександр, 2026</p>
-    </footer>
+        </footer>
+</div>
 
 </body>
 </html>
