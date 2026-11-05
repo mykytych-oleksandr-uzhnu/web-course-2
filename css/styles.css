@@ -228,6 +228,71 @@ nav a.current {
     color: var(--color-text);
     font-weight: 700;
 }
+/* ----- Меню без JS: <details> + <summary> ----- */
+/* База (телефон): у шапці заголовок, а меню під ним на всю ширину */
+body > header {
+    flex-wrap: wrap;
+}
+
+.nav {
+    flex: 1 1 100%;
+}
+
+/* summary виглядає як кнопка; display: block прибирає стандартний трикутник */
+.nav__toggle {
+    display: block;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-brand-light);
+    color: var(--color-on-brand);
+    border-radius: var(--radius);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* summary втрачає видимий фокус через наші стилі, тому повертаємо його */
+.nav__toggle:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Пункти вертикально, кожен не нижчий за 44px (мінімум для пальця) */
+.nav__list {
+    list-style: none;
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.nav__list a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+}
+
+@media (min-width: 768px) {
+    /* Кнопку ховаємо, список стає горизонтальним рядом на Flexbox */
+    .nav {
+        flex: 0 1 auto;
+    }
+
+    .nav__toggle {
+        display: none;
+    }
+
+    .nav details > .nav__list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0;
+        gap: var(--space-sm);
+    }
+
+    .nav__list a {
+        min-height: 0;
+    }
+}
 
 body>footer {
     background: var(--color-surface);
