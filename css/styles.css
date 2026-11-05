@@ -522,9 +522,24 @@ a:active {
 }
 
 .cards {
+  
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
     gap: var(--gap);
+}
+
+/* база (телефон): --min-col: 240px з :root дає одну картку в ряд.
+   Нижче перевизначаємо тільки значення змінної, а не кількість колонок. */
+@media (min-width: 768px) {
+    .cards {
+        --min-col: 200px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .cards {
+        --min-col: 160px;
+    }
 }
 
 /* Розкладка лише для карток у сітці каталогу. padding: 0 скасовує
@@ -622,6 +637,7 @@ a:active {
     margin-top: auto;
     display: flex;
     gap: var(--space-sm);
+    flex-wrap: wrap;
     padding: var(--space-md);
 }
 
@@ -641,19 +657,43 @@ a:active {
 /* ---------- LR6: макет сторінки ---------- */
 .layout {
     display: grid;
-    grid-template-columns: var(--sidebar) 1fr var(--sidebar);
-    grid-template-rows: 1fr auto;
+    grid-template-columns: 1fr;
     grid-template-areas:
-                    "nav main side"
-        "foot foot foot";
+        "nav"
+        "main"
+        "side"
+        "foot";
     gap: var(--gap);
     padding: var(--gap);
 }
+
 
 .layout__nav    { grid-area: nav; }
 .layout__main   { grid-area: main; min-width: 0; }
 .layout__aside  { grid-area: side; }
 .layout__footer { grid-area: foot; }
+
+@media (min-width: 768px) {
+    .layout {
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas:
+            "nav  nav"
+            "main side"
+            "foot foot";
+    }
+}
+
+@media (min-width: 1024px) {
+    .layout {
+        grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "nav  main side"
+            "foot foot foot";
+        width: min(100%, 1200px);
+        margin: 0 auto;
+    }
+}
 
 .layout__nav,
 .layout__aside,
