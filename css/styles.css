@@ -802,12 +802,16 @@ body {
    height: 100% тут не спрацює, бо в body немає явної висоти і не врахується шапка */
 .layout { flex: 1; }
 main    { flex: 1; }
-/* головна: дві колонки без aside */
-.layout--home {
-    grid-template-columns: var(--sidebar) 1fr;
-    grid-template-areas:
-        "nav  main"
-        "foot foot";
+
+/* Головна: без правої колонки. На телефоні лишається одна колонка (база .layout),
+   дві зони з'являються з 768px */
+@media (min-width: 768px) {
+    .layout--home {
+        grid-template-columns: var(--sidebar) 1fr;
+        grid-template-areas:
+            "nav main"
+            "foot foot";
+    }
 }
 
 /* ---------- LR6: модальне вікно ---------- */
