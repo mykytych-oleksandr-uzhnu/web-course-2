@@ -844,14 +844,28 @@ dialog::backdrop {
     }
 }
 
-/* Тут ваш коментар своїми словами: що робить both в animation-fill-mode
-   і що було б видно без нього */
+/* both: до початку анімації вікно вже має вигляд першого кадру, а після кінця лишається в стані останнього. Без нього вікно на мить мигнуло б у кінцевому вигляді до старту. */
 dialog[open] {
     animation: pop 280ms ease-out both;
 }
 
 dialog[open]::backdrop {
     animation: fade 200ms ease-out both;
+}
+
+/* ===== Спінер завантаження (заготовка для LR10) ===== */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 6px solid var(--color-surface);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    /* linear: швидкість обертання стала, коло крутиться рівно. З ease воно б сповільнювалось на початку й у кінці кожного оберту і виглядало б як ривки. */
+    animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 button.card__action {
@@ -862,4 +876,28 @@ button.card__action {
 /* поки модальне вікно відкрите, сторінка позаду не прокручується */
 body:has(dialog[open]) {
     overflow: hidden;
+}
+
+/* ===== Повага до prefers-reduced-motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Картка не рухається, але реакція на наведення лишається (змінюється колір, а не позиція) */
+@media (prefers-reduced-motion: reduce) {
+    .card:hover,
+    .card:focus-within {
+        transform: none;
+        background: var(--color-surface);
+    }
+
+    .card:hover .card__img,
+    .card:focus-within .card__img {
+        transform: none;
+    }
 }
