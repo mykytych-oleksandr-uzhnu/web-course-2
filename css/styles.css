@@ -584,6 +584,7 @@ a:active {
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
+    transition: transform 250ms ease, box-shadow 250ms ease;
 }
 
 .cards {
@@ -626,7 +627,21 @@ a:active {
     width: 100%;
     height: var(--card-img-height);
     object-fit: cover;
-    object-position: center;
+        object-position: center;
+    transition: transform 250ms ease;
+}
+/* Картка піднімається при наведенні і при фокусі всередині (клавіатура) */
+.card:hover,
+.card:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgb(0 0 0 / 18%);
+}
+
+/* Вкладений ефект: обкладинка всередині картки трохи збільшується.
+   overflow: hidden на .card обрізає збільшену картинку по рамці. */
+.card:hover .card__img,
+.card:focus-within .card__img {
+    transform: scale(1.08);
 }
 
 .card__body {
