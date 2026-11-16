@@ -1,0 +1,907 @@
+/* =========================================================
+   Колекція відеоігор — web-course-2
+   Варіант: відеоігри (фізичні копії)
+   Микитич Олександр, 2 курс, Кібербезпека
+   LR4 — жовтень 2026, LR5 — жовтень 2026
+   ========================================================= */
+
+/* Шрифти Google Fonts з підтримкою кирилиці:
+   Montserrat — заголовки, PT Serif — основний текст.
+   Разом використано 2 гарнітури і 3 накреслення (700 + 400 + 700).
+   @import за правилами CSS мусить стояти до будь-яких інших правил,
+   тому він вище за box-sizing. */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=PT+Serif:wght@400;700&subset=cyrillic&display=swap');
+
+/* ---------------------------------------------------------
+   0. Глобальна нормалізація коробок (LR5, п.2)
+   За замовчуванням (content-box) width — це ширина лише вмісту, а padding
+   і border додаються зверху: блок width: 50% + padding 1rem з кожного боку
+   займе більше половини рядка, і дві такі колонки не помістяться поруч.
+   У border-box width — це вже вся коробка разом із padding і border:
+   відступи «з'їдають» місце всередині, а зовнішній розмір лишається
+   рівно таким, як записано. ::before і ::after додано, бо псевдоелементи
+   не успадковують box-sizing від свого елемента.
+   --------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+   /* Тут ваш коментар своїми словами */
+   img,
+   video,
+   iframe {
+       max-width: 100%;
+       height: auto;
+   }
+      .table-wrap {
+       overflow-x: auto;
+   }
+
+/* ---------------------------------------------------------
+   1. Палітра та нетипові custom properties
+   --------------------------------------------------------- */
+:root {
+    /* кольори варіанта (6 обов'язкових ролей + додаткові) */
+    --color-brand: hsl(220 60% 28%);
+    --color-accent: hsl(38 92% 50%);
+    --color-bg: #ffffff;
+    --color-surface: hsl(220 30% 96%);
+    --color-text: hsl(220 25% 12%);
+    --color-muted: hsl(220 12% 45%);
+    --color-border: hsl(220 20% 80%);
+    --color-invalid: hsl(0 72% 45%);
+    --color-valid: hsl(142 60% 32%);
+
+    /* похідні кольори: щоб поза :root не лишилося жодного «сирого» кольору */
+    --color-on-brand: #ffffff;
+    /* текст на синьому фоні */
+    --color-brand-light: hsl(220 45% 38%);
+    /* плитки меню на фоні шапки */
+    --color-invalid-bg: hsl(0 72% 96%);
+    --color-valid-bg: hsl(142 60% 96%);
+
+    /* нетипові (не кольорові) змінні з LR4 */
+    --radius: 0.4rem;
+    --space: 1rem;
+    --shadow: 0 2px 8px rgb(0 0 0 / 12%);
+    --font-heading: "Montserrat", "Segoe UI", sans-serif;
+    --font-body: "PT Serif", Georgia, "Times New Roman", serif;
+
+    /* розміри (LR5): усі відступи нижче — лише через ці змінні */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --radius-lg: 12px;
+    --card-width: 260px;
+    --card-img-height: 170px;
+    --banner-width: 900px;
+
+    /* макет (LR6) */
+    --gap: 1.25rem;
+    --min-col: 240px;
+    --sidebar: 220px;
+}
+
+/* ---------------------------------------------------------
+   2. Базові стилі та типографіка
+   --------------------------------------------------------- */
+body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 100%;
+    /* 16px */
+    line-height: 1.6;
+    /* 1.5–1.7 для основного тексту */
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    /* 1.1–1.3 для заголовків */
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.15rem;
+}
+
+/* зображення не вилазять за межі батьківського блока */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ширина текстових абзаців обмежена, щоб рядки не тягнулися на весь екран */
+main p {
+    max-width: 65ch;
+}
+
+/* letter-spacing рівно в одному місці — там, де текст написано великими
+   літерами (text-transform: uppercase) — у пунктах меню навігації */
+nav a {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* приклад var() із запасним значенням: якщо --shadow раптом не оголошено
+   (наприклад, зникне з :root), картка просто отримає цю легку тінь за
+   замовчуванням замість того, щоб лишитися без тіні взагалі */
+.card {
+    box-shadow: var(--shadow, 0 2px 8px rgb(0 0 0 / 10%));
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: var(--space);
+}
+
+/* ---------------------------------------------------------
+   3. Наскрізна шапка й горизонтальне меню (LR4 п.5, LR5 п.8)
+   Селектор body > header, а не просто header: усередині карток на
+   головній теж є <header>, і вони не мають ставати синіми чи липкими.
+   --------------------------------------------------------- */
+/* position: sticky — шапка прокручується разом зі сторінкою, доки не
+   торкнеться верху вікна (top: 0), а далі «прилипає».
+   z-index працює лише для позиціонованих елементів, тому без position
+   він би просто ігнорувався; а без z-index картки з position: relative,
+   що йдуть у розмітці пізніше, малювалися б поверх шапки. */
+body>header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-brand);
+    /* непрозорий: текст не просвічує */
+    color: var(--color-on-brand);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap);
+}
+
+body>header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-on-brand);
+}
+
+/* комбінатор "сусід": відступ одразу під шапкою перед основним вмістом */
+header+main {
+    display: block;
+    margin-top: var(--space);
+}
+
+/* бічні відступи, щоб вміст не прилипав до країв вікна */
+main {
+    padding: 0 var(--space-md);
+}
+
+
+body>header ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+/* кожне посилання — окрема «плитка»: власний фон, відступи, скруглення */
+nav a {
+    display: block;
+    padding: var(--space-xs) var(--space-sm);
+    text-decoration: none;
+    background: var(--color-brand-light);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+}
+
+/* колір тексту — через :link і :visited: інакше загальні a:link / a:visited
+   з розділу 6 мають вищу специфічність (0,1,1) за nav a (0,0,2)
+   і фарбують пункти меню в синій на синьому фоні */
+nav a:link,
+nav a:visited {
+    color: var(--color-on-brand);
+}
+
+nav a:hover {
+    background: var(--color-accent);
+    color: var(--color-text);
+}
+
+/* поточна сторінка — клас "переїжджає" по сторінках, розмітка та сама */
+nav a.current {
+    background: var(--color-accent);
+    color: var(--color-text);
+    font-weight: 700;
+}
+/* ----- Меню без JS: <details> + <summary> ----- */
+/* База (телефон): у шапці заголовок, а меню під ним на всю ширину */
+body > header {
+    flex-wrap: wrap;
+}
+
+.nav {
+    flex: 1 1 100%;
+}
+
+/* summary виглядає як кнопка; display: block прибирає стандартний трикутник */
+.nav__toggle {
+    display: block;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-brand-light);
+    color: var(--color-on-brand);
+    border-radius: var(--radius);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* summary втрачає видимий фокус через наші стилі, тому повертаємо його */
+.nav__toggle:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Пункти вертикально, кожен не нижчий за 44px (мінімум для пальця) */
+.nav__list {
+    list-style: none;
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.nav__list a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+}
+
+@media (min-width: 768px) {
+    /* Кнопку ховаємо, список стає горизонтальним рядом на Flexbox */
+    .nav {
+        flex: 0 1 auto;
+    }
+
+    .nav__toggle {
+        display: none;
+    }
+
+    .nav details > .nav__list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0;
+        gap: var(--space-sm);
+    }
+
+    .nav__list a {
+        min-height: 0;
+    }
+}
+
+body>footer {
+    background: var(--color-surface);
+    color: var(--color-muted);
+    padding: var(--space);
+    text-align: center;
+}
+
+/* комбінатор "прямий нащадок": стилізуємо лише секції, що лежать
+   безпосередньо в <main>, а не вкладені в них довільні блоки */
+main>section {
+    padding: var(--space) 0;
+}
+
+/* ---------------------------------------------------------
+   4. Таблиця каталогу з LR2 (п.6) — лише селекторами по структурі
+   --------------------------------------------------------- */
+table {
+    border-collapse: collapse;
+    /* інакше лінії подвояться */
+    width: 100%;
+}
+
+caption {
+    text-align: left;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+
+th,
+td {
+    border: 1px solid var(--color-border);
+    padding: 0.5em 0.75em;
+    text-align: left;
+}
+
+thead th {
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+}
+
+/* числова колонка (ціна) — завжди останній td в рядку tbody */
+tbody td:last-child {
+    text-align: right;
+}
+
+/* Зебра рядків: формула an+b тут — 2n, тобто even.
+   2n перебирає 2, 4, 6... — усі парні рядки тіла таблиці,
+   саме їм даємо фон var(--color-surface). Непарні (2n+1/odd)
+   лишаються білими — так рядки легше розрізняти оком. */
+tbody tr:nth-child(even) {
+    background: var(--color-surface);
+}
+
+tbody tr:hover {
+    background: var(--color-accent);
+}
+
+/* ---------------------------------------------------------
+   5. Форма з LR3 (п.7)
+   --------------------------------------------------------- */
+fieldset {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space);
+    margin-bottom: var(--space);
+}
+
+legend {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    padding: 0 0.5em;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.25em;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 24rem;
+    padding: 0.5em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+/* :focus:invalid, а не просто :invalid — required-поля є невалідними
+   одразу після завантаження сторінки, ще до того, як людина почала
+   щось вводити. Якщо прибрати :focus, уся форма стане червоною ще до
+   взаємодії з нею. :focus:invalid підсвічує поле лише тоді, коли
+   користувач саме зараз у ньому друкує і значення ще не підходить. */
+input:focus:invalid,
+select:focus:invalid,
+textarea:focus:invalid {
+    border-color: var(--color-invalid);
+    background: var(--color-invalid-bg);
+}
+
+input:focus:valid,
+select:focus:valid,
+textarea:focus:valid {
+    border-color: var(--color-valid);
+    background: var(--color-valid-bg);
+}
+
+/* обов'язкові поля позначені псевдоелементом (зірочка), а не текстом
+   у розмітці: :has() перевіряє, чи йде одразу за підписом required-поле */
+label:has(+ input:required)::after,
+label:has(+ select:required)::after {
+    content: " *";
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+/* кнопки submit і reset обрані атрибутним селектором, без класів */
+button[type="submit"] {
+    background: var(--color-accent);
+    color: var(--color-text);
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.6em 1.4em;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button[type="reset"] {
+    background: transparent;
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.6em 1.4em;
+    cursor: pointer;
+}
+
+/* псевдоклас :checked — позначений варіант (радіо/чекбокс) підсвічує
+   свій підпис, щоб було видно вибір навіть без фокуса на самому полі */
+input:checked+label {
+    color: var(--color-brand);
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   6. Обов'язковий набір селекторів (п.8)
+   --------------------------------------------------------- */
+
+/* псевдоклас :not() — усі пункти FAQ, крім закритого за замовчуванням,
+   отримують трохи приглушений маркер підсумку, доки їх не розгорнули */
+details:not([open]) summary {
+    color: var(--color-muted);
+}
+
+/* псевдоклас :first-child — прибираємо зайвий відступ зверху в першого
+   елемента всередині <main>, яким би він не був */
+main>*:first-child {
+    margin-top: 0;
+}
+
+/* псевдоелементи ::before / ::after з обов'язковим content —
+   декоративні лапки навколо цитати на головній сторінці */
+blockquote {
+    font-style: italic;
+    color: var(--color-muted);
+    padding: 0 1.5em;
+}
+
+blockquote::before {
+    content: "«";
+    color: var(--color-accent);
+}
+
+blockquote::after {
+    content: "»";
+    color: var(--color-accent);
+}
+
+/* атрибутний селектор — зовнішні посилання позначаємо значком через
+   ::after (ще один псевдоелемент, одночасно демонструє attribute-selector) */
+a[href^="http"]::after {
+    content: " ↗";
+}
+
+a[href$=".pdf"]::after {
+    content: " (PDF)";
+}
+
+/* Повний набір станів посилань у порядку LVHFA.
+   Порядок критичний, бо :hover і :active йдуть пізніше за :link/:visited
+   і мають перекривати їх у каскаді — якщо :visited поставити після :hover,
+   відвіданий стан знову "забере" колір у наведення й клік. */
+a:link {
+    color: var(--color-brand);
+}
+
+a:visited {
+    color: var(--color-muted);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+a:active {
+    color: var(--color-invalid);
+}
+
+/* ---------------------------------------------------------
+   7. Демонстрація специфічності (п.9)
+   --------------------------------------------------------- */
+
+/* --- Демонстрація специфічності ---
+   Претенденти на колір заголовка картки Persona 5 Royal:
+   h3               → (0,0,1)
+   .card h3         → (0,1,1)
+   #promo h3        → (1,0,1)  ← перемагає
+
+   Порівнюємо трійки зліва направо, як номер версії:
+   у #promo h3 одиниця в першій колонці (id), тому решта вже не має
+   значення. Скільки б класів я не додав до .card, вони не наздоженуть
+   один id — саме тому id для стилів зазвичай не використовують. */
+/* h3       { color: var(--color-text); } */
+/* .card h3 { color: var(--color-muted); } */
+#promo h3 {
+    color: var(--color-brand);
+}
+
+/* Якби тут був inline-стиль style="color: red" прямо в розмітці,
+   він переміг би всі три правила вище, бо inline-стилі мають
+   специфічність (1,0,0,0) — на порядок вищу за будь-який id-селектор
+   у файлі стилів. Це погано для підтримки коду: такий колір довелося б
+   шукати і правити в самому HTML на кожній сторінці окремо, а не в
+   одному файлі styles.css. */
+/* <h3 style="color: red;">Persona 5 Royal</h3> */
+
+/* підпис-footer у картках головної сторінки */
+.card footer {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}
+
+/* =========================================================
+   LR5. БЛОКОВА МОДЕЛЬ І ПОЗИЦІОНУВАННЯ
+   ========================================================= */
+
+/* ===== Градієнтний банер (п.9) ===== */
+/* Градієнт тримається темного синього на більшій частині довжини, а
+   бурштин з'являється лише в кінці — так білий текст читається всюди.
+   text-shadow — страховка для світлого правого краю. */
+.banner {
+    width: min(100%, var(--banner-width));
+    margin: 0 auto var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    color: var(--color-on-brand);
+    background-image: linear-gradient(120deg, var(--color-brand) 0%, var(--color-brand-light) 60%, var(--color-accent) 100%);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 40%);
+}
+
+.banner h2 {
+    margin: 0 0 var(--space-sm);
+}
+
+.banner p {
+    margin: 0;
+}
+
+/* ===== Картки каталогу (п.4–7) ===== */
+
+/* Система відліку для бейджа. Експеримент: без position: relative бейдж
+   рахує top/right від найближчого позиціонованого предка, а такого немає,
+   тож координати беруться від початкового блока (вікна) — і бейджі обох
+   карток злітають у правий верхній кут сторінки, один на одного. */
+.card {
+    position: relative;
+}
+
+/* overflow: hidden обрізає все, що виходить за межі картки, — без нього
+   прямокутні кути зображення вилазили б поверх скруглених кутів border-radius. */
+.card {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.cards {
+  
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
+    gap: var(--gap);
+}
+
+/* база (телефон): --min-col: 240px з :root дає одну картку в ряд.
+   Нижче перевизначаємо тільки значення змінної, а не кількість колонок. */
+@media (min-width: 768px) {
+    .cards {
+        --min-col: 200px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .cards {
+        --min-col: 160px;
+    }
+}
+
+/* Розкладка лише для карток у сітці каталогу. padding: 0 скасовує
+   внутрішній відступ картки з LR4 — зображення має йти від краю до краю,
+   а відступ отримує тільки .card__body. Вертикальний відступ — лише знизу. */
+.cards .card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background: var(--color-bg);
+}
+
+/* object-fit: cover заповнює всю рамку 100% × 170px, зберігаючи пропорції
+   фото, і обрізає зайве по краях. display: block прибирає кілька пікселів
+   під картинкою: img за замовчуванням рядковий елемент і стоїть на базовій
+   лінії тексту, під якою браузер лишає місце для «хвостиків» літер (у, р). */
+.card__img {
+    display: block;
+    width: 100%;
+    height: var(--card-img-height);
+    object-fit: cover;
+        object-position: center;
+    transition: transform 250ms ease;
+}
+/* Картка піднімається при наведенні і при фокусі всередині (клавіатура) */
+.card:hover,
+.card:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgb(0 0 0 / 18%);
+}
+
+/* Вкладений ефект: обкладинка всередині картки трохи збільшується.
+   overflow: hidden на .card обрізає збільшену картинку по рамці. */
+.card:hover .card__img,
+.card:focus-within .card__img {
+    transform: scale(1.08);
+}
+
+.card__body {
+    padding: var(--space-md);
+}
+
+/* Три крапки: потрібні всі три властивості разом —
+   nowrap забороняє перенос, overflow обрізає зайве, ellipsis малює «…». */
+.card__title {
+    margin: 0 0 var(--space-sm);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Відступи в картці — тільки знизу: так вони ніколи не стикаються
+   й не схлопуються (див. демонстрацію в кінці файлу). */
+.card__meta,
+.card__id {
+    margin: 0 0 var(--space-sm);
+}
+
+.card__meta {
+    color: var(--color-muted);
+}
+
+.card__id {
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* останній абзац картки — без нижнього відступу, його вже дає padding */
+.card__body> :last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Бейдж (п.7) ===== */
+/* position: absolute виймає бейдж із потоку: він не займає місця,
+   не розтягує картку і не зсуває зображення чи текст. */
+.card__badge {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-accent);
+    color: var(--color-text);
+    /* темний текст на бурштині — контрастніше за білий */
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+}
+
+/* ===== Демонстрація: схлопування відступів (п.10) ===== */
+/* Схлопування вертикальних відступів (margin collapse).
+   Якщо розкоментувати цей блок, відстань між рядком платформи (.card__meta)
+   і кодом гри (.card__id) у картці буде НЕ 24 + 16 = 40px, а 24px:
+   два вертикальні відступи блокових сусідів, що стикаються, не додаються,
+   а зливаються в один — більший із двох.
+   Горизонтальні відступи так не поводяться, вони завжди додаються.
+   Між самими картками схлопування немає: вони елементи Grid, а відступи
+   рядкових блоків не схлопуються ніколи.
+   Саме тому в цій роботі всі вертикальні відступи задані тільки
+   в один бік — знизу.
+
+.card__meta { margin-bottom: 24px; }
+.card__meta + .card__id { margin-top: 16px; }
+*/
+/* margin-top: auto забирає весь вільний простір над блоком у flex-колонці,
+   так само як margin: 0 auto ділить простір по горизонталі, тому кнопки стають унизу */
+.card__actions {
+    margin-top: auto;
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    padding: var(--space-md);
+}
+
+.card .card__action {
+    display: block;
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    border-radius: var(--radius);
+    text-decoration: none;
+}
+
+.card .card__action:hover {
+    background: var(--color-accent);
+}
+
+/* ---------- LR6: макет сторінки ---------- */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "nav"
+        "main"
+        "side"
+        "foot";
+    gap: var(--gap);
+    padding: var(--gap);
+}
+
+
+.layout__nav    { grid-area: nav; }
+.layout__main   { grid-area: main; min-width: 0; }
+.layout__aside  { grid-area: side; }
+.layout__footer { grid-area: foot; }
+
+@media (min-width: 768px) {
+    .layout {
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas:
+            "nav  nav"
+            "main side"
+            "foot foot";
+    }
+}
+
+@media (min-width: 1024px) {
+    .layout {
+        grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "nav  main side"
+            "foot foot foot";
+        width: min(100%, 1200px);
+        margin: 0 auto;
+    }
+}
+
+.layout__nav,
+.layout__aside,
+.layout__footer {
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border-radius: var(--radius);
+}
+
+.layout__nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+/* ---------- LR6: притиснутий футер ---------- */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* flex: 1 змушує елемент забрати весь вільний простір у flex-батька (body);
+   height: 100% тут не спрацює, бо в body немає явної висоти і не врахується шапка */
+.layout { flex: 1; }
+main    { flex: 1; }
+
+/* Головна: без правої колонки. На телефоні лишається одна колонка (база .layout),
+   дві зони з'являються з 768px */
+@media (min-width: 768px) {
+    .layout--home {
+        grid-template-columns: var(--sidebar) 1fr;
+        grid-template-areas:
+            "nav main"
+            "foot foot";
+    }
+}
+
+/* ---------- LR6: модальне вікно ---------- */
+/* z-index не потрібен: showModal() виносить вікно у верхній шар (top layer),
+   який завжди над усією сторінкою, на відміну від липкої шапки у звичайному потоці */
+dialog {
+    width: min(90%, 420px);
+    padding: var(--space-lg);
+    border: none;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
+}
+
+dialog::backdrop {
+    background: rgb(0 0 0 / 55%);
+}
+
+/* ===== Анімація появи модалки (@keyframes) ===== */
+@keyframes fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes pop {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* both: до початку анімації вікно вже має вигляд першого кадру, а після кінця лишається в стані останнього. Без нього вікно на мить мигнуло б у кінцевому вигляді до старту. */
+dialog[open] {
+    animation: pop 280ms ease-out both;
+}
+
+dialog[open]::backdrop {
+    animation: fade 200ms ease-out both;
+}
+
+/* ===== Спінер завантаження (заготовка для LR10) ===== */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 6px solid var(--color-surface);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    /* linear: швидкість обертання стала, коло крутиться рівно. З ease воно б сповільнювалось на початку й у кінці кожного оберту і виглядало б як ривки. */
+    animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+button.card__action {
+    border: none;
+    font: inherit;
+    cursor: pointer;
+}
+/* поки модальне вікно відкрите, сторінка позаду не прокручується */
+body:has(dialog[open]) {
+    overflow: hidden;
+}
+
+/* ===== Повага до prefers-reduced-motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Картка не рухається, але реакція на наведення лишається (змінюється колір, а не позиція) */
+@media (prefers-reduced-motion: reduce) {
+    .card:hover,
+    .card:focus-within {
+        transform: none;
+        background: var(--color-surface);
+    }
+
+    .card:hover .card__img,
+    .card:focus-within .card__img {
+        transform: none;
+    }
+}
