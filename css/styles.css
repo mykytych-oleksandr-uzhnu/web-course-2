@@ -905,3 +905,14 @@ body:has(dialog[open]) {
         transform: none;
     }
 }
+
+/* white-space: pre-line зберігає переноси рядків із \n; без нього всі рядки виводу злилися б в один суцільний рядок. */
+.js-out {
+    white-space: pre-line;
+    font-family: ui-monospace, monospace;
+    background: var(--color-surface);
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+    max-width: 100%;}
