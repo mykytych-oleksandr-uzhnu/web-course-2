@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Замовлення гри для колекції — Колекція відеоігор</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
     <header>
         <h1>Колекція відеоігор</h1>
-        <nav aria-label="Головне меню">
-            <ul>
-                <li><a href="index.html">Головна</a></li>
-                <li><a href="catalog.html">Каталог</a></li>
-                <li><a href="form.html">Замовлення</a></li>
-                <li><a href="index.html#about">Про проєкт</a></li>
-                <li><a href="index.html#favorites">Найцінніші екземпляри</a></li>
-                <li><a href="index.html#faq">Питання та відповіді</a></li>
-            </ul>
+        <nav class="nav" aria-label="Головне меню">
+            <details open>
+                <summary class="nav__toggle">☰ Меню</summary>
+                <ul class="nav__list">
+                    <li><a href="index.html">Головна</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="form.html" class="current">Замовлення</a></li>
+                    <li><a href="index.html#about">Про проєкт</a></li>
+                    <li><a href="index.html#favorites">Найцінніші екземпляри</a></li>
+                    <li><a href="index.html#faq">Питання та відповіді</a></li>
+                </ul>
+            </details>
         </nav>
     </header>
 
     <main>
         <h1>Замовлення гри для поповнення колекції</h1>
-        <p>Заповніть форму, якщо хочете, щоб я додав конкретне видання гри до списку бажаного або оформив обмін із вашої колекції. Після відправлення я зв'яжуся з вами за вказаним телефоном або поштою для підтвердження деталей.</p>
+        <p>Заповніть форму, якщо хочете, щоб я додав конкретне видання гри до списку бажаного або оформив обмін із вашої
+            колекції. Після відправлення я зв'яжуся з вами за вказаним телефоном або поштою для підтвердження деталей.
+        </p>
 
         <form action="/submit" method="post">
             <!-- method="post": форма створює нове замовлення на придбання гри, тому повторне
@@ -34,17 +42,14 @@
 
                 <p>
                     <label for="fullname">Прізвище та ім'я:</label><br>
-                    <input type="text" id="fullname" name="fullname"
-                           placeholder="Микитич Олександр"
-                           minlength="2" maxlength="60"
-                           autocomplete="name" required>
+                    <input type="text" id="fullname" name="fullname" placeholder="Микитич Олександр" minlength="2"
+                        maxlength="60" autocomplete="name" required>
                 </p>
 
                 <p>
                     <label for="email">Електронна пошта:</label><br>
-                    <input type="email" id="email" name="email"
-                           placeholder="name@example.com"
-                           autocomplete="email" required>
+                    <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="email"
+                        required>
                 </p>
 
                 <!-- pattern="\+380[0-9]{9}"
@@ -53,17 +58,13 @@
                      Разом: +380671234567 -->
                 <p>
                     <label for="phone">Телефон:</label><br>
-                    <input type="tel" id="phone" name="phone"
-                           placeholder="+380671234567"
-                           pattern="\+380[0-9]{9}"
-                           title="Формат: +380 і рівно 9 цифр номера, без пробілів і дефісів"
-                           autocomplete="tel" required>
+                    <input type="tel" id="phone" name="phone" placeholder="+380671234567" pattern="\+380[0-9]{9}"
+                        title="Формат: +380 і рівно 9 цифр номера, без пробілів і дефісів" autocomplete="tel" required>
                 </p>
 
                 <p>
                     <label for="visitDate">Бажана дата отримання:</label><br>
-                    <input type="date" id="visitDate" name="visitDate"
-                           min="2026-01-01" max="2026-12-31">
+                    <input type="date" id="visitDate" name="visitDate" min="2026-01-01" max="2026-12-31">
                 </p>
             </fieldset>
 
@@ -84,8 +85,7 @@
 
                 <p>
                     <label for="quantity">Кількість примірників:</label><br>
-                    <input type="number" id="quantity" name="quantity"
-                           min="1" max="5" step="1" value="1" required>
+                    <input type="number" id="quantity" name="quantity" min="1" max="5" step="1" value="1" required>
                 </p>
 
                 <!-- pattern="[A-Z]{2}-[0-9]{4}-[0-9]{4}"
@@ -97,10 +97,9 @@
                      Разом: GM-2026-0042 -->
                 <p>
                     <label for="orderCode">Код бажаного видання (якщо відомий):</label><br>
-                    <input type="text" id="orderCode" name="orderCode"
-                           placeholder="GM-2026-0042"
-                           pattern="[A-Z]{2}-[0-9]{4}-[0-9]{4}"
-                           title="Формат: дві великі літери, дефіс, чотири цифри, дефіс, чотири цифри — наприклад GM-2026-0042">
+                    <input type="text" id="orderCode" name="orderCode" placeholder="GM-2026-0042"
+                        pattern="[A-Z]{2}-[0-9]{4}-[0-9]{4}"
+                        title="Формат: дві великі літери, дефіс, чотири цифри, дефіс, чотири цифри — наприклад GM-2026-0042">
                 </p>
 
                 <fieldset>
@@ -141,9 +140,8 @@
 
                 <p>
                     <label for="comments">Коментар до замовлення:</label><br>
-                    <textarea id="comments" name="comments" rows="4"
-                              minlength="0" maxlength="500"
-                              placeholder="Наприклад: цікавить лише PAL-версія"></textarea>
+                    <textarea id="comments" name="comments" rows="4" minlength="0" maxlength="500"
+                        placeholder="Наприклад: цікавить лише PAL-версія"></textarea>
                 </p>
 
                 <p>
@@ -164,4 +162,5 @@
     </footer>
 
 </body>
+
 </html>
