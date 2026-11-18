@@ -14,7 +14,7 @@
 
     <header>
         <h1>Колекція відеоігор</h1>
-                    <button id="burger" class="burger" type="button" aria-expanded="false" aria-controls="menu">☰</button>
+        <button id="burger" class="burger" type="button" aria-expanded="false" aria-controls="menu">☰</button>
         <nav id="menu" class="nav menu" aria-label="Головне меню">
             <ul class="nav__list">
                 <li><a href="index.html">Головна</a></li>
@@ -33,7 +33,7 @@
             колекції. Після відправлення я зв'яжуся з вами за вказаним телефоном або поштою для підтвердження деталей.
         </p>
 
-        <form action="/submit" method="post">
+        <form id="order" action="/submit" method="post" novalidate>
             <!-- method="post": форма створює нове замовлення на придбання гри, тому повторне
                  надсилання по F5 не має відбуватися випадково, і дані не повинні лишатися в URL -->
 
@@ -44,12 +44,14 @@
                     <label for="fullname">Прізвище та ім'я:</label><br>
                     <input type="text" id="fullname" name="fullname" placeholder="Микитич Олександр" minlength="2"
                         maxlength="60" autocomplete="name" required>
+                        <span class="error" id="err-fullname"></span>
                 </p>
 
                 <p>
                     <label for="email">Електронна пошта:</label><br>
                     <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="email"
                         required>
+                        <span class="error" id="err-email"></span>
                 </p>
 
                 <!-- pattern="\+380[0-9]{9}"
@@ -60,6 +62,7 @@
                     <label for="phone">Телефон:</label><br>
                     <input type="tel" id="phone" name="phone" placeholder="+380671234567" pattern="\+380[0-9]{9}"
                         title="Формат: +380 і рівно 9 цифр номера, без пробілів і дефісів" autocomplete="tel" required>
+                        <span class="error" id="err-phone"></span>
                 </p>
 
                 <p>
@@ -81,11 +84,13 @@
                         <option value="switch">Nintendo Switch</option>
                         <option value="pc">ПК</option>
                     </select>
+                    <span class="error" id="err-platform"></span>
                 </p>
 
                 <p>
                     <label for="quantity">Кількість примірників:</label><br>
                     <input type="number" id="quantity" name="quantity" min="1" max="5" step="1" value="1" required>
+                    <span class="error" id="err-quantity"></span>
                 </p>
 
                 <!-- pattern="[A-Z]{2}-[0-9]{4}-[0-9]{4}"
@@ -147,6 +152,7 @@
                 <p>
                     <input type="checkbox" id="agreement" name="agreement" value="yes" required>
                     <label for="agreement">Погоджуюсь з правилами обробки персональних даних</label>
+                    <span class="error" id="err-agreement"></span>
                 </p>
             </fieldset>
 
@@ -155,6 +161,10 @@
                 <button type="reset">Очистити форму</button>
             </p>
         </form>
+        <section id="receipt" hidden>
+            <h2>Ваше замовлення</h2>
+            <ul id="receipt-list"></ul>
+        </section>
     </main>
 
     <footer>
