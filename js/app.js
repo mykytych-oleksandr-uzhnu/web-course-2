@@ -286,7 +286,7 @@ const detailsDlg = document.getElementById("details");
 
 // Один слухач на контейнері працює і для карток, створених пізніше: клік спливає від кнопки
 // вгору до .cards, а closest(".card") знаходить картку, навіть якщо її створив renderCards
-// після пошуку. Слухачі, повішені на кнопки, після перемальовування «оглухли» б.
+// після пошуку. Слухачі, повішені на кнопки, після перемальовування оглухли б.
 cardsRoot.addEventListener("click", (event) => {
     const card = event.target.closest(".card");
     if (!card) return;
