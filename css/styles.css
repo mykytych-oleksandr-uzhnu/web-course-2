@@ -967,3 +967,78 @@ select.invalid {
     border: 2px solid #1f3a73;
     border-radius: 8px;
 }
+/* ===== Тема: кнопка ===== */
+.theme-toggle {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.theme-toggle:focus-visible {
+    outline: 3px solid #f5a30a;
+    outline-offset: 2px;
+}
+
+/* ===== Тема: темна, ввімкнена кнопкою ===== */
+:root.dark-theme body {
+    background: #121212;
+    color: #e6e6e6;
+}
+
+:root.dark-theme main,
+:root.dark-theme .card,
+:root.dark-theme fieldset,
+:root.dark-theme .controls,
+:root.dark-theme .layout__nav,
+:root.dark-theme dialog {
+    background: #1e1e1e;
+    color: #e6e6e6;
+    border-color: #444;
+}
+
+:root.dark-theme input,
+:root.dark-theme select,
+:root.dark-theme textarea {
+    background: #2a2a2a;
+    color: #e6e6e6;
+    border-color: #555;
+}
+
+:root.dark-theme .error {
+    color: #ff8a80;
+}
+
+/* ===== Тема: за налаштуванням системи, якщо користувач не вибрав світлу ===== */
+@media (prefers-color-scheme: dark) {
+    :root:not(.light-theme) body {
+        background: #121212;
+        color: #e6e6e6;
+    }
+
+    :root:not(.light-theme) main,
+    :root:not(.light-theme) .card,
+    :root:not(.light-theme) fieldset,
+    :root:not(.light-theme) .controls,
+    :root:not(.light-theme) .layout__nav,
+    :root:not(.light-theme) dialog {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        border-color: #444;
+    }
+
+    :root:not(.light-theme) input,
+    :root:not(.light-theme) select,
+    :root:not(.light-theme) textarea {
+        background: #2a2a2a;
+        color: #e6e6e6;
+        border-color: #555;
+    }
+
+    :root:not(.light-theme) .error {
+        color: #ff8a80;
+    }
+}
