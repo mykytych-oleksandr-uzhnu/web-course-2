@@ -921,3 +921,17 @@ body:has(dialog[open]) {
     background: #c0392b;
     color: #fff;
 }
+
+/* Тимчасове повідомлення в кутку екрана */
+.toast {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    max-width: 320px;
+    padding: 12px 16px;
+    background: #1f3a73;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}

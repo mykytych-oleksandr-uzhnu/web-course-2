@@ -159,6 +159,22 @@ const show = (id, value) => {
     box.textContent = Array.isArray(value) ? value.join("\n") : value;
 };
 
+let toastTimer = null;
+
+// Приймає текст, показує його у блоці #toast на 2,5 секунди.
+const showToast = (text) => {
+    const toast = document.getElementById("toast");
+    if (toast === null) return;
+    toast.textContent = text;
+    toast.hidden = false;
+    // clearTimeout скасовує попередній таймер: інакше після кількох швидких викликів
+    // старий таймер сховав би новий тост раніше, ніж мине його власний час.
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.hidden = true;
+    }, 2500);
+};
+
 // Приймає гру, повертає рядок "Назва (рік)".
 const line = (game) => `${game.title} (${game.year})`;
 
@@ -297,6 +313,7 @@ cardsRoot.addEventListener("click", (event) => {
     document.getElementById("d-line2").textContent = `Жанр: ${item.genre}, ціна: $${item.price}`;
     document.getElementById("d-line3").textContent = `Код: ${item.details.code}, стан: ${item.details.condition}`;
     detailsDlg.showModal();
+    showToast(`Відкрито: ${item.title}`);
 });
 
 document.getElementById("d-close").addEventListener("click", () => detailsDlg.close());
