@@ -279,4 +279,25 @@ show("out-stats", [
     `Різних платформ: ${stats.categories}`
 ]);
 console.log(games.length)
+
+// ===== Модалка: одне делегування на весь каталог =====
+const cardsRoot = document.getElementById("cards");
+const detailsDlg = document.getElementById("details");
+
+// Один слухач на контейнері працює і для карток, створених пізніше: клік спливає від кнопки
+// вгору до .cards, а closest(".card") знаходить картку, навіть якщо її створив renderCards
+// після пошуку. Слухачі, повішені на кнопки, після перемальовування «оглухли» б.
+cardsRoot.addEventListener("click", (event) => {
+    const card = event.target.closest(".card");
+    if (!card) return;
+    const item = games.find((g) => g.id === Number(card.dataset.id));
+    if (!item) return;
+    document.getElementById("d-title").textContent = item.title;
+    document.getElementById("d-line1").textContent = `Платформа: ${item.platform}, ${item.year}`;
+    document.getElementById("d-line2").textContent = `Жанр: ${item.genre}, ціна: $${item.price}`;
+    document.getElementById("d-line3").textContent = `Код: ${item.details.code}, стан: ${item.details.condition}`;
+    detailsDlg.showModal();
+});
+
+document.getElementById("d-close").addEventListener("click", () => detailsDlg.close());
 renderCards(games);
