@@ -70,7 +70,7 @@ const games = [
         details: { code: "GM-2004-0006", condition: "коробкове видання" },
         tags: ["шутер", "класика", "фізика", "сюжет"]
     },
-        {
+    {
         id: 7,
         title: "Final Fantasy VII",
         year: 1997,
@@ -98,64 +98,61 @@ const games = [
 
 // Малює картки каталогу з масиву list. Усі дані йдуть тільки через textContent.
 function renderCards(list) {
-const container = document.getElementById("cards");
-container.replaceChildren();
+    const container = document.getElementById("cards");
+    container.replaceChildren();
 
-for (const item of list) {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.dataset.id = item.id;
+    for (const item of list) {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.dataset.id = item.id;
 
-    const badge = document.createElement("span");
-    badge.className = item.available ? "card__badge" : "card__badge card__badge--out";
-    badge.textContent = item.available ? "В наявності" : "Немає";
+        const badge = document.createElement("span");
+        badge.className = item.available ? "card__badge" : "card__badge card__badge--out";
+        badge.textContent = item.available ? "В наявності" : "Немає";
 
-    const img = document.createElement("img");
-    img.className = "card__img";
-    img.src = "https://picsum.photos/seed/" + item.id + "/600/400";
-    img.alt = "Обкладинка " + item.title + " для " + item.platform;
-    img.width = 600;
-    img.height = 400;
+        const img = document.createElement("img");
+        img.className = "card__img";
+        img.src = "https://picsum.photos/seed/" + item.id + "/600/400";
+        img.alt = "Обкладинка " + item.title + " для " + item.platform;
+        img.width = 600;
+        img.height = 400;
 
-    const body = document.createElement("div");
-    body.className = "card__body";
+        const body = document.createElement("div");
+        body.className = "card__body";
 
-    const title = document.createElement("h3");
-    title.className = "card__title";
-    title.textContent = item.title;
+        const title = document.createElement("h3");
+        title.className = "card__title";
+        title.textContent = item.title;
 
-    const meta = document.createElement("p");
-    meta.className = "card__meta";
-    meta.textContent = item.platform + " · " + item.genre + " · " + item.details.condition;
+        const meta = document.createElement("p");
+        meta.className = "card__meta";
+        meta.textContent = item.platform + " · " + item.genre + " · " + item.details.condition;
 
-    const code = document.createElement("p");
-    code.className = "card__id";
-    code.textContent = "Код: " + item.details.code;
+        const code = document.createElement("p");
+        code.className = "card__id";
+        code.textContent = "Код: " + item.details.code;
 
-    body.append(title, meta, code);
+        body.append(title, meta, code);
 
-    const actions = document.createElement("div");
-    actions.className = "card__actions";
+        const actions = document.createElement("div");
+        actions.className = "card__actions";
 
-    const button = document.createElement("button");
-    button.className = "card__action";
-    button.type = "button";
-    button.textContent = "Детальніше";
+        const button = document.createElement("button");
+        button.className = "card__action";
+        button.type = "button";
+        button.textContent = "Детальніше";
 
-    actions.append(button);
+        actions.append(button);
 
-    card.append(badge, img, body, actions);
-    container.append(card);
-}
+        card.append(badge, img, body, actions);
+        container.append(card);
+    }
 }
 
 // Приймає id елемента й значення (рядок або масив рядків), записує текст у елемент.
 const show = (id, value) => {
     const box = document.getElementById(id);
-    if (box === null) {
-        console.error("Немає елемента з id:", id);
-        return;
-    }
+    if (box === null) return;
     box.textContent = Array.isArray(value) ? value.join("\n") : value;
 };
 
@@ -263,58 +260,80 @@ show("out-sorted", [
     "Вихідний порядок:",
     ...games.map(line)
 ]);
-const searchInput = document.getElementById("q");
-const platformSelect = document.getElementById("filter");
-const emptyMsg = document.getElementById("empty");
+if (document.getElementById("cards") !== null) {
+    const searchInput = document.getElementById("q");
+    const platformSelect = document.getElementById("filter");
+    const emptyMsg = document.getElementById("empty");
 
-function applyFilters() {
-  const query = searchInput.value.trim().toLowerCase();
-  const platform = platformSelect.value;
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const platform = platformSelect.value;
 
-  const byPlatform = platform === "all" ? games : filterByCategory(games, platform);
+        const byPlatform = platform === "all" ? games : filterByCategory(games, platform);
 
-  const result = byPlatform.filter(g =>
-    g.title.toLowerCase().includes(query) ||
-    g.genre.toLowerCase().includes(query)
-  );
+        const result = byPlatform.filter(g =>
+            g.title.toLowerCase().includes(query) ||
+            g.genre.toLowerCase().includes(query)
+        );
 
-  renderCards(result);
-  emptyMsg.hidden = result.length > 0;
+        renderCards(result);
+        emptyMsg.hidden = result.length > 0;
+    }
+
+    // input спрацьовує на кожну введену літеру, а change лише коли поле втрачає фокус,
+    // тож для пошуку "на льоту" потрібен саме input.
+    searchInput.addEventListener("input", applyFilters);
+    platformSelect.addEventListener("change", applyFilters);
+    const stats = statsForGames(games);
+    show("out-stats", [
+        `Кількість ігор: ${stats.count}`,
+        `Сума цін: $${stats.total}`,
+        `Середня ціна: $${stats.average}`,
+        `Найдорожча: ${stats.max.title} ($${stats.max.price})`,
+        `Різних платформ: ${stats.categories}`
+    ]);
+
+    // ===== Модалка: одне делегування на весь каталог =====
+    const cardsRoot = document.getElementById("cards");
+    const detailsDlg = document.getElementById("details");
+
+    // Один слухач на контейнері працює і для карток, створених пізніше: клік спливає від кнопки
+    // вгору до .cards, а closest(".card") знаходить картку, навіть якщо її створив renderCards
+    // після пошуку. Слухачі, повішені на кнопки, після перемальовування оглухли б.
+    cardsRoot.addEventListener("click", (event) => {
+        const card = event.target.closest(".card");
+        if (!card) return;
+        const item = games.find((g) => g.id === Number(card.dataset.id));
+        if (!item) return;
+        document.getElementById("d-title").textContent = item.title;
+        document.getElementById("d-line1").textContent = `Платформа: ${item.platform}, ${item.year}`;
+        document.getElementById("d-line2").textContent = `Жанр: ${item.genre}, ціна: $${item.price}`;
+        document.getElementById("d-line3").textContent = `Код: ${item.details.code}, стан: ${item.details.condition}`;
+        detailsDlg.showModal();
+        showToast(`Відкрито: ${item.title}`);
+    });
+
+    document.getElementById("d-close").addEventListener("click", () => detailsDlg.close());
+    renderCards(games);
 }
 
-// input спрацьовує на кожну введену літеру, а change лише коли поле втрачає фокус,
-// тож для пошуку "на льоту" потрібен саме input.
-searchInput.addEventListener("input", applyFilters);
-platformSelect.addEventListener("change", applyFilters);
-const stats = statsForGames(games);
-show("out-stats", [
-    `Кількість ігор: ${stats.count}`,
-    `Сума цін: $${stats.total}`,
-    `Середня ціна: $${stats.average}`,
-    `Найдорожча: ${stats.max.title} ($${stats.max.price})`,
-    `Різних платформ: ${stats.categories}`
-]);
-console.log(games.length)
+// ===== Меню: працює на всіх сторінках =====
+const burger = document.getElementById("burger");
+const menu = document.getElementById("menu");
 
-// ===== Модалка: одне делегування на весь каталог =====
-const cardsRoot = document.getElementById("cards");
-const detailsDlg = document.getElementById("details");
+function setMenu(open) {
+    menu.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", String(open));
+}
 
-// Один слухач на контейнері працює і для карток, створених пізніше: клік спливає від кнопки
-// вгору до .cards, а closest(".card") знаходить картку, навіть якщо її створив renderCards
-// після пошуку. Слухачі, повішені на кнопки, після перемальовування оглухли б.
-cardsRoot.addEventListener("click", (event) => {
-    const card = event.target.closest(".card");
-    if (!card) return;
-    const item = games.find((g) => g.id === Number(card.dataset.id));
-    if (!item) return;
-    document.getElementById("d-title").textContent = item.title;
-    document.getElementById("d-line1").textContent = `Платформа: ${item.platform}, ${item.year}`;
-    document.getElementById("d-line2").textContent = `Жанр: ${item.genre}, ціна: $${item.price}`;
-    document.getElementById("d-line3").textContent = `Код: ${item.details.code}, стан: ${item.details.condition}`;
-    detailsDlg.showModal();
-    showToast(`Відкрито: ${item.title}`);
+burger.addEventListener("click", () => {
+    setMenu(burger.getAttribute("aria-expanded") !== "true");
 });
 
-document.getElementById("d-close").addEventListener("click", () => detailsDlg.close());
-renderCards(games);
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenu(false);
+});
+
+document.addEventListener("click", (event) => {
+    if (!event.target.closest("#menu") && !event.target.closest("#burger")) setMenu(false);
+});
