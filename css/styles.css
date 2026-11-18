@@ -1042,3 +1042,25 @@ select.invalid {
         color: #ff8a80;
     }
 }
+/* ===== Тема: бічні блоки ===== */
+:root.dark-theme aside {
+    background: #1e1e1e;
+    color: #e6e6e6;
+}
+
+:root.dark-theme aside h2,
+:root.dark-theme aside li {
+    color: #e6e6e6;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.light-theme) aside {
+        background: #1e1e1e;
+        color: #e6e6e6;
+    }
+
+    :root:not(.light-theme) aside h2,
+    :root:not(.light-theme) aside li {
+        color: #e6e6e6;
+    }
+}
