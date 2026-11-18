@@ -1064,3 +1064,13 @@ select.invalid {
         color: #e6e6e6;
     }
 }
+/* ===== Тема: читабельність підписів ===== */
+:root.dark-theme .card__meta {
+    color: #b8b8b8;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.light-theme) .card__meta {
+        color: #b8b8b8;
+    }
+}
