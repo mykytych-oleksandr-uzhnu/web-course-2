@@ -337,3 +337,92 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("click", (event) => {
     if (!event.target.closest("#menu") && !event.target.closest("#burger")) setMenu(false);
 });
+
+// ===== Форма замовлення: перевірка і квитанція =====
+const orderForm = document.getElementById("order");
+
+if (orderForm !== null) {
+    const fieldIds = ["fullname", "email", "phone", "platform", "quantity", "agreement"];
+    // Свої тексти помилок українською: стандартні залежать від мови браузера.
+    const messages = {
+        fullname: "Вкажіть прізвище та ім'я",
+        email: "Вкажіть коректну пошту, наприклад name@example.com",
+        phone: "Формат: +380 і 9 цифр без пробілів і дефісів",
+        platform: "Оберіть платформу",
+        quantity: "Кількість від 1 до 5",
+        agreement: "Потрібна згода на обробку даних"
+    };
+    // Перевіряє одне поле: пише текст помилки в його span і ставить/знімає клас invalid.
+    function checkField(id) {
+        const input = document.getElementById(id);
+        const errorBox = document.getElementById("err-" + id);
+
+        // Власна перевірка: ім'я має містити щонайменше два слова.
+        // Порожній рядок "" скидає попередню помилку, інакше поле лишилося б невалідним назавжди.
+        if (id === "fullname") {
+            const value = input.value.trim();
+            const tooShort = value !== "" && value.split(/\s+/).length < 2;
+            input.setCustomValidity(tooShort ? "Вкажіть прізвище та ім'я через пробіл" : "");
+        }
+
+        const ok = input.checkValidity();
+                errorBox.textContent = ok ? "" : (input.validity.customError ? input.validationMessage : messages[id]);
+        input.classList.toggle("invalid", !ok);
+        return ok;
+    }
+
+    // Збирає значення з форми й малює квитанцію. Усі дані користувача йдуть тільки через textContent.
+    // Це захищає сторінку від виконання чужого HTML, але не є захистом даних:
+    // клієнтську перевірку легко обійти, тому справжню перевірку має робити сервер.
+    function showReceipt() {
+        const platform = document.getElementById("platform");
+        const quantity = Number(document.getElementById("quantity").value);
+        const condition = orderForm.querySelector('input[name="condition"]:checked');
+        const extras = orderForm.querySelectorAll('input[name="extras"]:checked');
+
+        const rows = [
+            "Ім'я: " + document.getElementById("fullname").value.trim(),
+            "Пошта: " + document.getElementById("email").value.trim(),
+            "Телефон: " + document.getElementById("phone").value.trim(),
+            "Платформа: " + platform.options[platform.selectedIndex].text,
+            "Кількість: " + quantity,
+            "Стан: " + (condition === null ? "не обрано" : condition.labels[0].textContent),
+                        "Додатково: " + (extras.length > 0
+                ? Array.from(extras, (e) => e.labels[0].textContent).join(", ")
+                : "нічого"),
+            "Згода на обробку даних: " + (document.getElementById("agreement").checked ? "так" : "ні")
+        ];
+
+        const list = document.getElementById("receipt-list");
+        list.replaceChildren();
+        for (const text of rows) {
+            const li = document.createElement("li");
+            li.textContent = text;
+            list.append(li);
+        }
+        document.getElementById("receipt").hidden = false;
+        showToast("Замовлення прийнято");
+    }
+
+    orderForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        let allOk = true;
+        for (const id of fieldIds) {
+            if (!checkField(id)) allOk = false;
+        }
+        if (allOk) showReceipt();
+    });
+
+    // Поле, яке вже підсвічене як помилкове, перевіряється на льоту, поки користувач виправляє.
+    orderForm.addEventListener("input", (event) => {
+        if (event.target.classList.contains("invalid")) checkField(event.target.id);
+    });
+
+    orderForm.addEventListener("reset", () => {
+        for (const id of fieldIds) {
+            document.getElementById("err-" + id).textContent = "";
+            document.getElementById(id).classList.remove("invalid");
+        }
+        document.getElementById("receipt").hidden = true;
+    });
+}
