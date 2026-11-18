@@ -47,8 +47,26 @@
                     <div class="spinner" aria-hidden="true"></div>
                     <p>Завантажуємо каталог…</p>
                 </div>
+<div class="controls">
+  <label for="q">Пошук</label>
+  <input type="search" id="q" placeholder="назва або жанр">
+
+  <label for="filter">Платформа</label>
+  <select id="filter">
+    <option value="all">усі</option>
+    <option value="PlayStation 4">PlayStation 4</option>
+    <option value="PlayStation">PlayStation</option>
+    <option value="Xbox 360">Xbox 360</option>
+    <option value="Nintendo 64">Nintendo 64</option>
+    <option value="Nintendo Switch">Nintendo Switch</option>
+    <option value="PC">PC</option>
+  </select>
+</div>
+
+<p id="empty" class="empty" hidden>Нічого не знайдено. Спробуйте інший запит.</p>
+       
                 
-        <div class="cards" id="cards"></div>
+<div class="cards" id="cards"></div>
             </section>
             <dialog id="details">
                 <h2>Persona 5 Royal</h2>

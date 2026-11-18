@@ -247,7 +247,29 @@ show("out-sorted", [
     "Вихідний порядок:",
     ...games.map(line)
 ]);
+const searchInput = document.getElementById("q");
+const platformSelect = document.getElementById("filter");
+const emptyMsg = document.getElementById("empty");
 
+function applyFilters() {
+  const query = searchInput.value.trim().toLowerCase();
+  const platform = platformSelect.value;
+
+  const byPlatform = platform === "all" ? games : filterByCategory(games, platform);
+
+  const result = byPlatform.filter(g =>
+    g.title.toLowerCase().includes(query) ||
+    g.genre.toLowerCase().includes(query)
+  );
+
+  renderCards(result);
+  emptyMsg.hidden = result.length > 0;
+}
+
+// input спрацьовує на кожну введену літеру, а change лише коли поле втрачає фокус,
+// тож для пошуку "на льоту" потрібен саме input.
+searchInput.addEventListener("input", applyFilters);
+platformSelect.addEventListener("change", applyFilters);
 const stats = statsForGames(games);
 show("out-stats", [
     `Кількість ігор: ${stats.count}`,
