@@ -366,7 +366,7 @@ if (orderForm !== null) {
         }
 
         const ok = input.checkValidity();
-                errorBox.textContent = ok ? "" : (input.validity.customError ? input.validationMessage : messages[id]);
+        errorBox.textContent = ok ? "" : (input.validity.customError ? input.validationMessage : messages[id]);
         input.classList.toggle("invalid", !ok);
         return ok;
     }
@@ -387,7 +387,7 @@ if (orderForm !== null) {
             "Платформа: " + platform.options[platform.selectedIndex].text,
             "Кількість: " + quantity,
             "Стан: " + (condition === null ? "не обрано" : condition.labels[0].textContent),
-                        "Додатково: " + (extras.length > 0
+            "Додатково: " + (extras.length > 0
                 ? Array.from(extras, (e) => e.labels[0].textContent).join(", ")
                 : "нічого"),
             "Згода на обробку даних: " + (document.getElementById("agreement").checked ? "так" : "ні")
@@ -424,5 +424,47 @@ if (orderForm !== null) {
             document.getElementById(id).classList.remove("invalid");
         }
         document.getElementById("receipt").hidden = true;
+    });
+}
+
+// ===== Тема: працює на всіх сторінках =====
+const themeBtn = document.getElementById("theme");
+
+// Повертає true, якщо зараз темна тема: або вибрана кнопкою, або (якщо вибору нема) системна.
+function isDark() {
+    const root = document.documentElement;
+    if (root.classList.contains("dark-theme")) return true;
+    if (root.classList.contains("light-theme")) return false;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+// Приймає true/false, ставить клас на <html>, оновлює aria-pressed і текст кнопки.
+function applyTheme(dark) {
+    const root = document.documentElement;
+    root.classList.toggle("dark-theme", dark);
+    root.classList.toggle("light-theme", !dark);
+    themeBtn.setAttribute("aria-pressed", String(dark));
+    themeBtn.textContent = dark ? "Світла тема" : "Темна тема";
+}
+
+if (themeBtn !== null) {
+    // Вибір зберігаємо між сторінками. try/catch: сховище може бути недоступним.
+    let saved = null;
+    try {
+        saved = localStorage.getItem("theme");
+    } catch (e) {
+        saved = null;
+    }
+    applyTheme(saved === null ? isDark() : saved === "dark");
+
+    themeBtn.addEventListener("click", () => {
+        const dark = !isDark();
+        applyTheme(dark);
+        try {
+            localStorage.setItem("theme", dark ? "dark" : "light");
+        } catch (e) {
+            // сховище недоступне: тема працює до перезавантаження
+        }
+        showToast(dark ? "Увімкнено темну тему" : "Увімкнено світлу тему");
     });
 }
