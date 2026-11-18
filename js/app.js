@@ -2,6 +2,7 @@
 // const фіксує лише посилання на масив, а не його вміст, тому games.push(...) працює;
 // заборонено тільки перепризначення games = ...
 // Ціна вказана в доларах.
+// Дані каталогу: 8 ігор з моєї таблиці. У LR10 цей масив переїде в зовнішній JSON-файл і завантажуватиметься через fetch.
 const games = [
     {
         id: 1,
@@ -68,14 +69,30 @@ const games = [
         available: true,
         details: { code: "GM-2004-0006", condition: "коробкове видання" },
         tags: ["шутер", "класика", "фізика", "сюжет"]
+    },
+        {
+        id: 7,
+        title: "Final Fantasy VII",
+        year: 1997,
+        price: 25,
+        platform: "PlayStation",
+        genre: "JRPG",
+        available: true,
+        details: { code: "GM-1997-0007", condition: "три диски, повний комплект" },
+        tags: ["jrpg", "класика", "сюжет"]
+    },
+    {
+        id: 8,
+        title: "Halo 3",
+        year: 2007,
+        price: 8,
+        platform: "Xbox 360",
+        genre: "Шутер",
+        available: true,
+        details: { code: "GM-2007-0008", condition: "дуже добрий" },
+        tags: ["шутер", "кооператив"]
     }
 ];
-
-// ===== Допоміжні функції =====
-
-// ===== Функції обробки =====
-
-// ===== Виклики show =====
 
 // ===== Допоміжні функції =====
 
@@ -186,3 +203,4 @@ show("out-stats", [
     `Найдорожча: ${stats.max.title} ($${stats.max.price})`,
     `Різних платформ: ${stats.categories}`
 ]);
+console.log(games.length)
