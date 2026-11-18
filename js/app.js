@@ -96,6 +96,59 @@ const games = [
 
 // ===== Допоміжні функції =====
 
+// Малює картки каталогу з масиву list. Усі дані йдуть тільки через textContent.
+function renderCards(list) {
+const container = document.getElementById("cards");
+container.replaceChildren();
+
+for (const item of list) {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.dataset.id = item.id;
+
+    const badge = document.createElement("span");
+    badge.className = item.available ? "card__badge" : "card__badge card__badge--out";
+    badge.textContent = item.available ? "В наявності" : "Немає";
+
+    const img = document.createElement("img");
+    img.className = "card__img";
+    img.src = "https://picsum.photos/seed/" + item.id + "/600/400";
+    img.alt = "Обкладинка " + item.title + " для " + item.platform;
+    img.width = 600;
+    img.height = 400;
+
+    const body = document.createElement("div");
+    body.className = "card__body";
+
+    const title = document.createElement("h3");
+    title.className = "card__title";
+    title.textContent = item.title;
+
+    const meta = document.createElement("p");
+    meta.className = "card__meta";
+    meta.textContent = item.platform + " · " + item.genre + " · " + item.details.condition;
+
+    const code = document.createElement("p");
+    code.className = "card__id";
+    code.textContent = "Код: " + item.details.code;
+
+    body.append(title, meta, code);
+
+    const actions = document.createElement("div");
+    actions.className = "card__actions";
+
+    const button = document.createElement("button");
+    button.className = "card__action";
+    button.type = "button";
+    button.textContent = "Детальніше";
+
+    actions.append(button);
+
+    card.append(badge, img, body, actions);
+    container.append(card);
+}
+}
+
 // Приймає id елемента й значення (рядок або масив рядків), записує текст у елемент.
 const show = (id, value) => {
     const box = document.getElementById(id);
@@ -204,3 +257,4 @@ show("out-stats", [
     `Різних платформ: ${stats.categories}`
 ]);
 console.log(games.length)
+renderCards(games);

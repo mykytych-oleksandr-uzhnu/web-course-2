@@ -916,3 +916,8 @@ body:has(dialog[open]) {
     line-height: 1.7;
     overflow-wrap: anywhere;
     max-width: 100%;}
+
+    .card__badge--out {
+    background: #c0392b;
+    color: #fff;
+}
