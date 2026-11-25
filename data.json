@@ -1,0 +1,163 @@
+[
+    {
+      "title": "The Witcher 3: Wild Hunt",
+      "developer": "CD Projekt RED",
+      "publisher": "CD Projekt",
+      "year": 2015,
+      "platforms": ["PC", "PS4", "PS5", "Xbox One", "Switch"],
+      "genres": ["RPG", "open world", "adventure"],
+      "requirements": {
+        "ram": "8GB",
+        "gpu": "GTX 770 / Radeon R9 290",
+        "cpu": "Intel i5-2500K",
+        "storage_gb": 50
+      },
+      "modes": ["singleplayer"],
+      "critics": [9.5, 10, 9, 9.8]
+    },
+    {
+      "title": "Stardew Valley",
+      "developer": "ConcernedApe",
+      "publisher": "ConcernedApe",
+      "year": 2016,
+      "platforms": ["PC", "Switch", "PS4", "Xbox", "Mobile"],
+      "genres": ["simulation", "farm", "RPG"],
+      "requirements": {
+        "ram": "2GB",
+        "gpu": "Integrated",
+        "cpu": "2.0GHz",
+        "storage_gb": 1
+      },
+      "modes": ["singleplayer", "multiplayer"],
+      "critics": [10, 9.5, 9.8]
+    },
+    {
+      "title": "Cyberpunk 2077",
+      "developer": "CD Projekt RED",
+      "publisher": "CD Projekt",
+      "year": 2020,
+      "platforms": ["PC", "PS4", "PS5", "Xbox One", "Xbox Series X"],
+      "genres": ["RPG", "sci-fi", "open world"],
+      "requirements": {
+        "ram": "12GB",
+        "gpu": "GTX 1060 / RX 580",
+        "cpu": "Intel i7-4790",
+        "storage_gb": 70
+      },
+      "modes": ["singleplayer"],
+      "critics": [8.5, 7.9, 9.2]
+    },
+    {
+      "title": "Hades",
+      "developer": "Supergiant Games",
+      "publisher": "Supergiant Games",
+      "year": 2020,
+      "platforms": ["PC", "Switch", "PS4", "PS5", "Xbox"],
+      "genres": ["roguelike", "action", "RPG"],
+      "requirements": {
+        "ram": "4GB",
+        "gpu": "GT 640",
+        "cpu": "Dual Core 2.4GHz",
+        "storage_gb": 15
+      },
+      "modes": ["singleplayer"],
+      "critics": [10, 9.7, 9.8]
+    },
+    {
+      "title": "Minecraft",
+      "developer": "Mojang Studios",
+      "publisher": "Microsoft",
+      "year": 2011,
+      "platforms": ["PC", "PS", "Xbox", "Switch", "Mobile"],
+      "genres": ["sandbox", "survival"],
+      "requirements": {
+        "ram": "4GB",
+        "gpu": "Intel HD 4000",
+        "cpu": "Intel i3",
+        "storage_gb": 4
+      },
+      "modes": ["singleplayer", "multiplayer", "online"],
+      "critics": [9.5, 10, 9.8]
+    },
+    {
+      "title": "Elden Ring",
+      "developer": "FromSoftware",
+      "publisher": "Bandai Namco",
+      "year": 2022,
+      "platforms": ["PC", "PS4", "PS5", "Xbox One", "Xbox Series X"],
+      "genres": ["action", "RPG", "open world"],
+      "requirements": {
+        "ram": "16GB",
+        "gpu": "GTX 1070 / RX Vega 56",
+        "cpu": "Intel i7-8700K",
+        "storage_gb": 60
+      },
+      "modes": ["singleplayer", "online co-op"],
+      "critics": [10, 10, 9.7]
+    },
+    {
+      "title": "Portal 2",
+      "developer": "Valve",
+      "publisher": "Valve",
+      "year": 2011,
+      "platforms": ["PC", "PS3", "Xbox 360"],
+      "genres": ["puzzle", "adventure"],
+      "requirements": {
+        "ram": "2GB",
+        "gpu": "GeForce 7600",
+        "cpu": "2.0GHz Dual Core",
+        "storage_gb": 8
+      },
+      "modes": ["singleplayer", "co-op"],
+      "critics": [10, 9.8, 9.5]
+    },
+    {
+      "title": "God of War",
+      "developer": "Santa Monica Studio",
+      "publisher": "Sony",
+      "year": 2018,
+      "platforms": ["PS4", "PS5", "PC"],
+      "genres": ["action", "adventure"],
+      "requirements": {
+        "ram": "8GB",
+        "gpu": "GTX 1060",
+        "cpu": "Intel i5-6600K",
+        "storage_gb": 70
+      },
+      "modes": ["singleplayer"],
+      "critics": [10, 10, 9.6]
+    },
+    {
+      "title": "Sea of Thieves",
+      "developer": "Rare",
+      "publisher": "Microsoft",
+      "year": 2018,
+      "platforms": ["PC", "Xbox"],
+      "genres": ["adventure", "online", "co-op"],
+      "requirements": {
+        "ram": "8GB",
+        "gpu": "GTX 1050 Ti",
+        "cpu": "Intel i5-4690",
+        "storage_gb": 50
+      },
+      "modes": ["multiplayer", "co-op", "online open world"],
+      "critics": [8.2, 8.6, 8.0]
+    },
+    {
+      "title": "The Legend of Zelda: Breath of the Wild",
+      "developer": "Nintendo",
+      "publisher": "Nintendo",
+      "year": 2017,
+      "platforms": ["Switch"],
+      "genres": ["adventure", "open world", "action"],
+      "requirements": {
+        "ram": "4GB",
+        "gpu": "Custom Nvidia Tegra",
+        "cpu": "ARM architecture",
+        "storage_gb": 14
+      },
+      "modes": ["singleplayer"],
+      "critics": [10, 10, 9.9]
+    }
+  ]
+  
