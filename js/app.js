@@ -1,160 +1,8 @@
 // ===== Дані =====
-// const фіксує лише посилання на масив, а не його вміст, тому games.push(...) працює;
-// заборонено тільки перепризначення games = ...
-// Ціна вказана в доларах.
-// Дані каталогу: 8 ігор з моєї таблиці. У LR10 цей масив переїде в зовнішній JSON-файл і завантажуватиметься через fetch.
-const games = [
-    {
-        id: 1,
-        title: "Persona 5 Royal",
-        year: 2020,
-        price: 45,
-        platform: "PlayStation 4",
-        genre: "JRPG",
-        available: true,
-        details: { code: "GM-2020-0001", condition: "як новий" },
-        tags: ["jrpg", "стиль"]
-    },
-    {
-        id: 2,
-        title: "Dishonored",
-        year: 2012,
-        price: 12,
-        platform: "PlayStation 4",
-        genre: "Immersive sim",
-        available: true,
-        details: { code: "GM-2012-0002", condition: "як новий" },
-        tags: ["стелс", "сюжет", "магія"]
-    },
-    {
-        id: 3,
-        title: "Deus Ex: Human Revolution",
-        year: 2011,
-        price: 15,
-        platform: "Xbox 360",
-        genre: "Immersive sim",
-        available: false,
-        details: { code: "GM-2011-0003", condition: "дуже добрий" },
-        tags: ["кіберпанк", "стелс", "рпг", "сюжет"]
-    },
-    {
-        id: 4,
-        title: "The Legend of Zelda: Ocarina of Time",
-        year: 1998,
-        price: 60,
-        platform: "Nintendo 64",
-        genre: "Action-adventure",
-        available: true,
-        details: { code: "GM-1998-0004", condition: "повний комплект" },
-        tags: ["класика", "пригоди"]
-    },
-    {
-        id: 5,
-        title: "Hollow Knight",
-        year: 2017,
-        price: 15,
-        platform: "Nintendo Switch",
-        genre: "Metroidvania",
-        available: true,
-        details: { code: "GM-2017-0005", condition: "як новий" },
-        tags: ["інді", "платформер", "складна"]
-    },
-    {
-        id: 6,
-        title: "Half-Life 2",
-        year: 2004,
-        price: 10,
-        platform: "PC",
-        genre: "Шутер",
-        available: true,
-        details: { code: "GM-2004-0006", condition: "коробкове видання" },
-        tags: ["шутер", "класика", "фізика", "сюжет"]
-    },
-    {
-        id: 7,
-        title: "Final Fantasy VII",
-        year: 1997,
-        price: 25,
-        platform: "PlayStation",
-        genre: "JRPG",
-        available: true,
-        details: { code: "GM-1997-0007", condition: "три диски, повний комплект" },
-        tags: ["jrpg", "класика", "сюжет"]
-    },
-    {
-        id: 8,
-        title: "Halo 3",
-        year: 2007,
-        price: 8,
-        platform: "Xbox 360",
-        genre: "Шутер",
-        available: true,
-        details: { code: "GM-2007-0008", condition: "дуже добрий" },
-        tags: ["шутер", "кооператив"]
-    }
-];
+// Масив заповнюється у loadData() після завантаження data.json. До LR10 він був зашитий у код.
+let games = [];
 
 // ===== Допоміжні функції =====
-
-// Малює картки каталогу з масиву list. Усі дані йдуть тільки через textContent.
-function renderCards(list) {
-    const container = document.getElementById("cards");
-    container.replaceChildren();
-
-    for (const item of list) {
-        const card = document.createElement("article");
-        card.className = "card";
-        card.dataset.id = item.id;
-
-        const badge = document.createElement("span");
-        badge.className = item.available ? "card__badge" : "card__badge card__badge--out";
-        badge.textContent = item.available ? "В наявності" : "Немає";
-
-        const img = document.createElement("img");
-        img.className = "card__img";
-        img.src = "https://picsum.photos/seed/" + item.id + "/600/400";
-        img.alt = "Обкладинка " + item.title + " для " + item.platform;
-        img.width = 600;
-        img.height = 400;
-
-        const body = document.createElement("div");
-        body.className = "card__body";
-
-        const title = document.createElement("h3");
-        title.className = "card__title";
-        title.textContent = item.title;
-
-        const meta = document.createElement("p");
-        meta.className = "card__meta";
-        meta.textContent = item.platform + " · " + item.genre + " · " + item.details.condition;
-
-        const code = document.createElement("p");
-        code.className = "card__id";
-        code.textContent = "Код: " + item.details.code;
-
-        body.append(title, meta, code);
-
-        const actions = document.createElement("div");
-        actions.className = "card__actions";
-
-        const button = document.createElement("button");
-        button.className = "card__action";
-        button.type = "button";
-        button.textContent = "Детальніше";
-
-        actions.append(button);
-
-        card.append(badge, img, body, actions);
-        container.append(card);
-    }
-}
-
-// Приймає id елемента й значення (рядок або масив рядків), записує текст у елемент.
-const show = (id, value) => {
-    const box = document.getElementById(id);
-    if (box === null) return;
-    box.textContent = Array.isArray(value) ? value.join("\n") : value;
-};
 
 let toastTimer = null;
 
@@ -172,299 +20,280 @@ const showToast = (text) => {
     }, 2500);
 };
 
-// Приймає гру, повертає рядок "Назва (рік)".
-const line = (game) => `${game.title} (${game.year})`;
+// Приймає тег, текст і клас, повертає створений елемент (текст іде тільки через textContent).
+function createEl(tag, text, className) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+}
 
-// Приймає масив ігор, повертає рядки зі списком або текст "нічого не знайдено".
-const listOrEmpty = (items) =>
-    items.length > 0 ? items.map((g) => `  • ${g.title}`).join("\n") : "  нічого не знайдено";
+// Приймає масив чисел, повертає середнє значення (0 для порожнього масиву).
+const average = (numbers) =>
+    numbers.length === 0 ? 0 : numbers.reduce((sum, n) => sum + n, 0) / numbers.length;
 
-// ===== Функції обробки =====
-
-// Приймає гру, повертає назву групи за платформою.
-function categoryOf(game) {
-    switch (game.platform) {
-        case "PlayStation 4":
-            return "Консолі Sony";
-        case "Xbox 360":
-            return "Консолі Microsoft";
-        case "Nintendo 64":
-        case "Nintendo Switch":
-            return "Консолі Nintendo";
-        default:
-            return "Інші платформи";
+// Читає список id обраного зі сховища. Повертає [], якщо ключа немає або вміст зіпсований.
+function loadFavorites() {
+    let raw = null;
+    try {
+        raw = localStorage.getItem("favorites");
+    } catch (error) {
+        return [];
+    }
+    if (!raw) return [];
+    try {
+        const list = JSON.parse(raw);
+        return Array.isArray(list) ? list : [];
+    } catch (error) {
+        return [];
     }
 }
 
-// Приймає масив ігор, повертає масив рядків "1. Назва — платформа, рік (код)".
-const numberedList = (items) => {
-    const lines = [];
-    for (let i = 0; i < items.length; i++) {
-        const g = items[i];
-        lines.push(`${i + 1}. ${g.title} — ${g.platform}, ${g.year} (код ${g.details.code})`);
+// Приймає масив id і записує його у сховище як JSON-рядок.
+function saveFavorites(list) {
+    try {
+        localStorage.setItem("favorites", JSON.stringify(list));
+    } catch (error) {
+        // сховище недоступне: обране працює до перезавантаження
     }
-    return lines;
-};
+}
 
-// Приймає масив і платформу, повертає ігри цієї платформи.
-const filterByCategory = (items, value) => items.filter((g) => g.platform === value);
+let favorites = loadFavorites();
 
-// Приймає масив і мінімальний рік, повертає ігри не старші за цей рік.
-const filterByYearFrom = (items, minYear) => items.filter((g) => g.year >= minYear);
+// ===== Завантаження даних =====
 
-// Приймає масив, повертає копію, відсортовану за роком (оригінал не змінюється).
-const sortByYear = (items) => [...items].sort((a, b) => a.year - b.year);
+// Завантажує data.json і повертає масив ігор із доданим id.
+// response.ok потрібна, бо fetch не кидає помилку на 404: запит "вдався", просто відповідь погана.
+// Без перевірки .json() спробував би розібрати сторінку помилки, і користувач побачив би незрозумілу помилку.
+async function loadData() {
+    const response = await fetch("data.json");
+    if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+    }
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("Файл даних порожній або має неправильну структуру");
+    }
+    // У файлі немає id, а файл змінювати не можна, тому id додаємо тут (1, 2, 3, ...).
+    return data.map((game, index) => ({ ...game, id: index + 1 }));
+}
 
-// Приймає масив, повертає копію, відсортовану за назвою в українській абетці.
-const sortByName = (items) => [...items].sort((a, b) => a.title.localeCompare(b.title, "uk"));
+// Приймає помилку і показує людині зрозуміле повідомлення на сторінці.
+function showLoadError(error) {
+    const box = document.getElementById("load-error");
+    box.hidden = false;
+    box.textContent = "Не вдалося завантажити каталог. Перевірте з'єднання і "
+        + "оновіть сторінку. Технічні подробиці: " + error.message;
+}
 
-// Приймає масив ігор, повертає об'єкт зі статистикою за цінами.
-const statsForGames = (items) => {
-    // 0 — початкове значення суми: без нього першим sum став би об'єкт гри, і результат зіпсувався б.
-    const total = items.reduce((sum, g) => sum + g.price, 0);
-    const max = items.reduce((best, g) => (g.price > best.price ? g : best));
-    return {
-        count: items.length,
-        total: total,
-        average: (total / items.length).toFixed(1),
-        max: max,
-        categories: new Set(items.map((g) => g.platform)).size
-    };
-};
-
-// ===== Виклики show =====
-
-show("out-count", `Записів у каталозі: ${games.length}`);
-show("out-numbered", numberedList(games));
-show("out-categories", games.map((g) => `${g.title} → ${categoryOf(g)}`));
-
-const sony = filterByCategory(games, "PlayStation 4");
-const recent = filterByYearFrom(games, 2010);
-const none = filterByCategory(games, "Sega Dreamcast");
-show("out-filter", [
-    `Платформа PlayStation 4: знайдено ${sony.length}`,
-    listOrEmpty(sony),
-    `Від 2010 року: знайдено ${recent.length}`,
-    listOrEmpty(recent),
-    `Платформа Sega Dreamcast: знайдено ${none.length}`,
-    listOrEmpty(none)
-]);
-
-show("out-sorted", [
-    "За роком (зростання):",
-    ...sortByYear(games).map(line),
-    "",
-    "За назвою (А–Я):",
-    ...sortByName(games).map(line),
-    "",
-    "Вихідний порядок:",
-    ...games.map(line)
-]);
+// ===== Каталог: виконується тільки на сторінці з #cards =====
 if (document.getElementById("cards") !== null) {
     const searchInput = document.getElementById("q");
     const platformSelect = document.getElementById("filter");
+    const sortSelect = document.getElementById("sort");
+    const onlyFav = document.getElementById("only-fav");
     const emptyMsg = document.getElementById("empty");
+    const countBox = document.getElementById("count");
+    const cardsRoot = document.getElementById("cards");
+    const detailsDlg = document.getElementById("details");
+    const loader = document.querySelector(".loader");
 
+    // Малює картки з масиву list. Усі дані йдуть тільки через textContent.
+    function renderCards(list) {
+        cardsRoot.replaceChildren();
+
+        for (const item of list) {
+            const card = document.createElement("article");
+            card.className = "card";
+            card.dataset.id = item.id;
+
+            const rating = average(item.critics);
+            const badge = createEl("span", "★ " + rating.toFixed(1), "card__badge");
+
+            const img = document.createElement("img");
+            img.className = "card__img";
+            img.src = "https://picsum.photos/seed/" + item.id + "/600/400";
+            img.alt = "Ілюстрація до гри " + item.title;
+            img.width = 600;
+            img.height = 400;
+
+            const body = createEl("div", undefined, "card__body");
+            const title = createEl("h3", item.title, "card__title");
+            const meta = createEl("p",
+                item.developer + " · " + item.year + " · " + item.platforms.join(", "), "card__meta");
+            const code = createEl("p",
+                "Місце на диску: " + item.requirements.storage_gb.toLocaleString("uk-UA") + " ГБ", "card__id");
+            body.append(title, meta, code);
+
+            const actions = createEl("div", undefined, "card__actions");
+
+            const isFav = favorites.includes(item.id);
+            const fav = createEl("button", isFav ? "❤️" : "🤍", "fav");
+            fav.type = "button";
+            fav.dataset.id = item.id;
+            fav.setAttribute("aria-pressed", String(isFav));
+            fav.setAttribute("aria-label", isFav ? "Прибрати з обраного" : "Додати до обраного");
+
+            const button = createEl("button", "Детальніше", "card__action");
+            button.type = "button";
+
+            actions.append(button, fav);
+            card.append(badge, img, body, actions);
+            cardsRoot.append(card);
+        }
+    }
+
+    // Збирає унікальні платформи з даних і додає їх як <option> у фільтр.
+    function fillPlatformOptions() {
+        const platforms = new Set();
+        for (const game of games) {
+            for (const name of game.platforms) platforms.add(name);
+        }
+        for (const name of [...platforms].sort()) {
+            const option = createEl("option", name);
+            option.value = name;
+            platformSelect.append(option);
+        }
+    }
+
+    // Читає всі елементи керування разом, фільтрує, сортує і перемальовує список.
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
         const platform = platformSelect.value;
+        const order = sortSelect.value;
 
-        const byPlatform = platform === "all" ? games : filterByCategory(games, platform);
+        const result = games.filter((g) => {
+            const textOk = g.title.toLowerCase().includes(query)
+                || g.developer.toLowerCase().includes(query);
+            const platformOk = platform === "all" || g.platforms.includes(platform);
+            const favOk = !onlyFav.checked || favorites.includes(g.id);
+            return textOk && platformOk && favOk;
+        });
 
-        const result = byPlatform.filter(g =>
-            g.title.toLowerCase().includes(query) ||
-            g.genre.toLowerCase().includes(query)
-        );
+        if (order === "year") result.sort((a, b) => a.year - b.year);
+        if (order === "rating") result.sort((a, b) => average(b.critics) - average(a.critics));
+        if (order === "title") result.sort((a, b) => a.title.localeCompare(b.title, "uk"));
 
         renderCards(result);
         emptyMsg.hidden = result.length > 0;
+        countBox.textContent = "Показано " + result.length + " із " + games.length;
     }
 
-    // input спрацьовує на кожну введену літеру, а change лише коли поле втрачає фокус,
-    // тож для пошуку "на льоту" потрібен саме input.
+    // Додає в контейнер заголовок і список рядків (або текст, якщо масив порожній).
+    function addListSection(container, heading, values) {
+        container.append(createEl("h4", heading));
+        if (values.length === 0) {
+            container.append(createEl("p", "Даних поки немає"));
+            return;
+        }
+        const ul = document.createElement("ul");
+        for (const value of values) ul.append(createEl("li", value));
+        container.append(ul);
+    }
+
+    // Заповнює вікно деталей даними однієї гри. Кожен контейнер спершу очищається.
+    function fillDetails(item) {
+        document.getElementById("d-title").textContent = item.title;
+
+        const main = document.getElementById("d-main");
+        main.replaceChildren();
+        const pairs = [
+            ["Розробник", item.developer],
+            ["Видавець", item.publisher],
+            ["Рік", String(item.year)],
+            ["Середня оцінка", average(item.critics).toFixed(1)]
+        ];
+        const dl = document.createElement("dl");
+        for (const [label, value] of pairs) {
+            dl.append(createEl("dt", label), createEl("dd", value));
+        }
+        main.append(dl);
+
+        const objectBox = document.getElementById("d-object");
+        objectBox.replaceChildren();
+        objectBox.append(createEl("h4", "Системні вимоги"));
+        const reqList = document.createElement("dl");
+        for (const [key, value] of Object.entries(item.requirements)) {
+            reqList.append(createEl("dt", key), createEl("dd", String(value)));
+        }
+        objectBox.append(reqList);
+
+        const listBox = document.getElementById("d-list");
+        listBox.replaceChildren();
+        addListSection(listBox, "Платформи", item.platforms);
+        addListSection(listBox, "Жанри", item.genres);
+        addListSection(listBox, "Режими гри", item.modes);
+
+        const tableBox = document.getElementById("d-table");
+        tableBox.replaceChildren();
+        tableBox.append(createEl("h4", "Оцінки критиків"));
+        if (item.critics.length === 0) {
+            tableBox.append(createEl("p", "Оцінок поки немає"));
+        } else {
+            const wrap = createEl("div", undefined, "table-wrap");
+            const table = document.createElement("table");
+            const headRow = document.createElement("tr");
+            headRow.append(createEl("th", "№"), createEl("th", "Оцінка"));
+            const thead = document.createElement("thead");
+            thead.append(headRow);
+            const tbody = document.createElement("tbody");
+            item.critics.forEach((score, index) => {
+                const row = document.createElement("tr");
+                row.append(createEl("td", String(index + 1)), createEl("td", score.toFixed(1)));
+                tbody.append(row);
+            });
+            table.append(thead, tbody);
+            wrap.append(table);
+            tableBox.append(wrap);
+        }
+    }
+
     searchInput.addEventListener("input", applyFilters);
     platformSelect.addEventListener("change", applyFilters);
-    const stats = statsForGames(games);
-    show("out-stats", [
-        `Кількість ігор: ${stats.count}`,
-        `Сума цін: $${stats.total}`,
-        `Середня ціна: $${stats.average}`,
-        `Найдорожча: ${stats.max.title} ($${stats.max.price})`,
-        `Різних платформ: ${stats.categories}`
-    ]);
-
-    // ===== Модалка: одне делегування на весь каталог =====
-    const cardsRoot = document.getElementById("cards");
-    const detailsDlg = document.getElementById("details");
+    sortSelect.addEventListener("change", applyFilters);
+    onlyFav.addEventListener("change", applyFilters);
 
     // Один слухач на контейнері працює і для карток, створених пізніше: клік спливає від кнопки
-    // вгору до .cards, а closest(".card") знаходить картку, навіть якщо її створив renderCards
-    // після пошуку. Слухачі, повішені на кнопки, після перемальовування оглухли б.
+    // вгору до .cards, а closest знаходить картку, навіть якщо її створив renderCards після пошуку.
     cardsRoot.addEventListener("click", (event) => {
+        const favBtn = event.target.closest(".fav");
+        if (favBtn) {
+            const id = Number(favBtn.dataset.id);
+            if (favorites.includes(id)) {
+                favorites = favorites.filter((f) => f !== id);
+                showToast("Прибрано з обраного");
+            } else {
+                favorites.push(id);
+                showToast("Додано до обраного");
+            }
+            saveFavorites(favorites);
+            applyFilters();
+            return;
+        }
         const card = event.target.closest(".card");
         if (!card) return;
         const item = games.find((g) => g.id === Number(card.dataset.id));
         if (!item) return;
-        document.getElementById("d-title").textContent = item.title;
-        document.getElementById("d-line1").textContent = `Платформа: ${item.platform}, ${item.year}`;
-        document.getElementById("d-line2").textContent = `Жанр: ${item.genre}, ціна: $${item.price}`;
-        document.getElementById("d-line3").textContent = `Код: ${item.details.code}, стан: ${item.details.condition}`;
+        fillDetails(item);
         detailsDlg.showModal();
-        showToast(`Відкрито: ${item.title}`);
     });
 
     document.getElementById("d-close").addEventListener("click", () => detailsDlg.close());
-    renderCards(games);
-}
 
-// ===== Меню: працює на всіх сторінках =====
-const burger = document.getElementById("burger");
-const menu = document.getElementById("menu");
-
-function setMenu(open) {
-    menu.classList.toggle("open", open);
-    burger.setAttribute("aria-expanded", String(open));
-}
-
-burger.addEventListener("click", () => {
-    setMenu(burger.getAttribute("aria-expanded") !== "true");
-});
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setMenu(false);
-});
-
-document.addEventListener("click", (event) => {
-    if (!event.target.closest("#menu") && !event.target.closest("#burger")) setMenu(false);
-});
-
-// ===== Форма замовлення: перевірка і квитанція =====
-const orderForm = document.getElementById("order");
-
-if (orderForm !== null) {
-    const fieldIds = ["fullname", "email", "phone", "platform", "quantity", "agreement"];
-    // Свої тексти помилок українською: стандартні залежать від мови браузера.
-    const messages = {
-        fullname: "Вкажіть прізвище та ім'я",
-        email: "Вкажіть коректну пошту, наприклад name@example.com",
-        phone: "Формат: +380 і 9 цифр без пробілів і дефісів",
-        platform: "Оберіть платформу",
-        quantity: "Кількість від 1 до 5",
-        agreement: "Потрібна згода на обробку даних"
-    };
-    // Перевіряє одне поле: пише текст помилки в його span і ставить/знімає клас invalid.
-    function checkField(id) {
-        const input = document.getElementById(id);
-        const errorBox = document.getElementById("err-" + id);
-
-        // Власна перевірка: ім'я має містити щонайменше два слова.
-        // Порожній рядок "" скидає попередню помилку, інакше поле лишилося б невалідним назавжди.
-        if (id === "fullname") {
-            const value = input.value.trim();
-            const tooShort = value !== "" && value.split(/\s+/).length < 2;
-            input.setCustomValidity(tooShort ? "Вкажіть прізвище та ім'я через пробіл" : "");
-        }
-
-        const ok = input.checkValidity();
-        errorBox.textContent = ok ? "" : (input.validity.customError ? input.validationMessage : messages[id]);
-        input.classList.toggle("invalid", !ok);
-        return ok;
-    }
-
-    // Збирає значення з форми й малює квитанцію. Усі дані користувача йдуть тільки через textContent.
-    // Це захищає сторінку від виконання чужого HTML, але не є захистом даних:
-    // клієнтську перевірку легко обійти, тому справжню перевірку має робити сервер.
-    function showReceipt() {
-        const platform = document.getElementById("platform");
-        const quantity = Number(document.getElementById("quantity").value);
-        const condition = orderForm.querySelector('input[name="condition"]:checked');
-        const extras = orderForm.querySelectorAll('input[name="extras"]:checked');
-
-        const rows = [
-            "Ім'я: " + document.getElementById("fullname").value.trim(),
-            "Пошта: " + document.getElementById("email").value.trim(),
-            "Телефон: " + document.getElementById("phone").value.trim(),
-            "Платформа: " + platform.options[platform.selectedIndex].text,
-            "Кількість: " + quantity,
-            "Стан: " + (condition === null ? "не обрано" : condition.labels[0].textContent),
-            "Додатково: " + (extras.length > 0
-                ? Array.from(extras, (e) => e.labels[0].textContent).join(", ")
-                : "нічого"),
-            "Згода на обробку даних: " + (document.getElementById("agreement").checked ? "так" : "ні")
-        ];
-
-        const list = document.getElementById("receipt-list");
-        list.replaceChildren();
-        for (const text of rows) {
-            const li = document.createElement("li");
-            li.textContent = text;
-            list.append(li);
-        }
-        document.getElementById("receipt").hidden = false;
-        showToast("Замовлення прийнято");
-    }
-
-    orderForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        let allOk = true;
-        for (const id of fieldIds) {
-            if (!checkField(id)) allOk = false;
-        }
-        if (allOk) showReceipt();
-    });
-
-    // Поле, яке вже підсвічене як помилкове, перевіряється на льоту, поки користувач виправляє.
-    orderForm.addEventListener("input", (event) => {
-        if (event.target.classList.contains("invalid")) checkField(event.target.id);
-    });
-
-    orderForm.addEventListener("reset", () => {
-        for (const id of fieldIds) {
-            document.getElementById("err-" + id).textContent = "";
-            document.getElementById(id).classList.remove("invalid");
-        }
-        document.getElementById("receipt").hidden = true;
-    });
-}
-
-// ===== Тема: працює на всіх сторінках =====
-const themeBtn = document.getElementById("theme");
-
-// Повертає true, якщо зараз темна тема: або вибрана кнопкою, або (якщо вибору нема) системна.
-function isDark() {
-    const root = document.documentElement;
-    if (root.classList.contains("dark-theme")) return true;
-    if (root.classList.contains("light-theme")) return false;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
-// Приймає true/false, ставить клас на <html>, оновлює aria-pressed і текст кнопки.
-function applyTheme(dark) {
-    const root = document.documentElement;
-    root.classList.toggle("dark-theme", dark);
-    root.classList.toggle("light-theme", !dark);
-    themeBtn.setAttribute("aria-pressed", String(dark));
-    themeBtn.textContent = dark ? "Світла тема" : "Темна тема";
-}
-
-if (themeBtn !== null) {
-    // Вибір зберігаємо між сторінками. try/catch: сховище може бути недоступним.
-    let saved = null;
-    try {
-        saved = localStorage.getItem("theme");
-    } catch (e) {
-        saved = null;
-    }
-    applyTheme(saved === null ? isDark() : saved === "dark");
-
-    themeBtn.addEventListener("click", () => {
-        const dark = !isDark();
-        applyTheme(dark);
+    // Запускає завантаження: спінер показується до запиту і ховається у finally (і після успіху, і після помилки).
+    // Ховати його в кінці try не можна: після помилки він лишився б крутитися вічно.
+    async function init() {
+        loader.hidden = false;
         try {
-            localStorage.setItem("theme", dark ? "dark" : "light");
-        } catch (e) {
-            // сховище недоступне: тема працює до перезавантаження
+            games = await loadData();
+            fillPlatformOptions();
+            applyFilters();
+        } catch (error) {
+            showLoadError(error);
+        } finally {
+            loader.hidden = true;
         }
-        showToast(dark ? "Увімкнено темну тему" : "Увімкнено світлу тему");
-    });
+    }
+
+    init();
 }

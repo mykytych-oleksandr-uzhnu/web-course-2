@@ -53,27 +53,34 @@
   <label for="filter">Платформа</label>
   <select id="filter">
     <option value="all">усі</option>
-    <option value="PlayStation 4">PlayStation 4</option>
-    <option value="PlayStation">PlayStation</option>
-    <option value="Xbox 360">Xbox 360</option>
-    <option value="Nintendo 64">Nintendo 64</option>
-    <option value="Nintendo Switch">Nintendo Switch</option>
-    <option value="PC">PC</option>
+    
   </select>
+  <label for="sort">Сортування</label>
+<select id="sort" name="sort">
+    <option value="default">Як у файлі</option>
+    <option value="year">За роком (від старих)</option>
+    <option value="rating">За оцінкою (від найвищої)</option>
+    <option value="title">За назвою (А–Я)</option>
+</select>
+<label><input type="checkbox" id="only-fav"> Тільки обране</label>
 </div>
 
 <p id="empty" class="empty" hidden>Нічого не знайдено. Спробуйте інший запит.</p>
+<p id="count" class="count"></p>
+<div class="loader" hidden>Завантажуємо…</div>
+<p id="load-error" class="load-error" role="alert" hidden></p>
        
                 
 <div class="cards" id="cards"></div>
             </section>
             <dialog id="details">
-                <h3 id="d-title"></h3>
-    <p id="d-line1"></p>
-    <p id="d-line2"></p>
-    <p id="d-line3"></p>
+    <h3 id="d-title"></h3>
+    <div id="d-main"></div>
+    <div id="d-object"></div>
+    <div id="d-list"></div>
+    <div id="d-table"></div>
     <button id="d-close" type="button">Закрити</button>
-            </dialog>
+</dialog>
             <section>
                 <h2>Розділи каталогу</h2>
                 <ul>
@@ -217,21 +224,7 @@
                     <figcaption>Частина колекції PS1-ігор, упорядкована за роком випуску</figcaption>
                 </figure>
             </section>
-            <section class="demo" id="demo">
-    <h2>Демонстрація роботи</h2>
-    <h3>Усього записів</h3>
-    <p class="js-out" id="out-count"></p>
-    <h3>Нумерований список</h3>
-    <p class="js-out" id="out-numbered"></p>
-    <h3>Категорії</h3>
-    <p class="js-out" id="out-categories"></p>
-    <h3>Фільтр</h3>
-    <p class="js-out" id="out-filter"></p>
-    <h3>Сортування</h3>
-    <p class="js-out" id="out-sorted"></p>
-    <h3>Статистика</h3>
-    <p class="js-out" id="out-stats"></p>
-</section>
+            
         </main>
         <aside class="layout__aside">
             <h2>Популярне</h2>
