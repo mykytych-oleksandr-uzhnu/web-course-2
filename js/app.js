@@ -297,3 +297,46 @@ if (document.getElementById("cards") !== null) {
 
     init();
 }
+
+// ===== Тема =====
+const themeBtn = document.getElementById("theme");
+const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+// Чи темна сторінка зараз: явний клас має пріоритет над системною схемою.
+function isDarkNow() {
+    const root = document.documentElement;
+    if (root.classList.contains("dark-theme")) return true;
+    if (root.classList.contains("light-theme")) return false;
+    return systemDark.matches;
+}
+
+// Ставить клас теми на <html> ("" прибирає обидва) і оновлює підпис кнопки.
+function applyTheme(name) {
+    const root = document.documentElement;
+    root.classList.toggle("dark-theme", name === "dark");
+    root.classList.toggle("light-theme", name === "light");
+    themeBtn.textContent = isDarkNow() ? "Світла тема" : "Темна тема";
+}
+
+if (themeBtn !== null) {
+    // Збережений вибір перевіряємо раніше за системну схему: це вибір самого користувача.
+    let savedTheme = null;
+    try {
+        savedTheme = localStorage.getItem("theme");
+    } catch (error) {
+        savedTheme = null;
+    }
+    applyTheme(savedTheme === "dark" || savedTheme === "light" ? savedTheme : "");
+
+    // Перемикає тему на протилежну і запам'ятовує вибір.
+    themeBtn.addEventListener("click", () => {
+        const next = isDarkNow() ? "light" : "dark";
+        applyTheme(next);
+        try {
+            localStorage.setItem("theme", next);
+        } catch (error) {
+            // Сховище недоступне: тема діє лише до перезавантаження.
+        }
+        showToast(next === "dark" ? "Темна тема" : "Світла тема");
+    });
+}
